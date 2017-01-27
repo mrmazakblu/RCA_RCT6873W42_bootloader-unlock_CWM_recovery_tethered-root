@@ -1,0 +1,22 @@
+# Copyright (C) 2012-2013 Intel Mobile Communications GmbH
+# Copyright (C) 2012 The Android Open Source Project
+#
+# USB configuration common for all android devices
+#
+# IMC Additions for VID/PID set using official 'Intel' identity
+
+on fs
+    write /sys/class/android_usb/android0/idVendor 0B05
+    write /sys/class/android_usb/android0/idProduct 7770
+    restorecon_recursive /cache
+    mount_all ./etc/recovery.fstab
+
+on init
+    mkdir /nvm_fs_partition 0777 misc misc
+
+
+on boot
+    chown system system /sys/class/leds/keyboard-backlight/brightness
+    chown system system /sys/class/leds/lcd-backlight/brightness
+    write /sys/class/leds/lcd-backlight/brightness 150
+    chmod 666 /dev/grahics/fb0

@@ -1,0 +1,19 @@
+on boot
+    start load_iwlwifi
+
+service load_iwlwifi /system/bin/sh /system/bin/load_iwlwifi.sh --ptest-boot
+	class core
+	user root
+	group system wifi
+        seclabel u:r:load_iwlwifi_script:s0
+	disabled
+	oneshot
+
+service p2p_supplicant /system/bin/wpa_supplicant \
+    -i wlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf -g@android:wpa_wlan0 \
+    -m/data/misc/wifi/p2p_supplicant.conf \
+    -O/data/misc/wifi/sockets -e /data/misc/wifi/entropy.bin
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
