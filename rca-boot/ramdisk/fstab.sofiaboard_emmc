@@ -10,7 +10,7 @@
 #
 
 /dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  /system              ext4    ro                                                                                        wait
-/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069  /data                ext4    nosuid,nodev,nodiratime,noatime,noauto_da_alloc,discard,journal_async_commit,data=ordered wait,check,forceencrypt=footer
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069  /data                ext4    nosuid,nodev,nodiratime,noatime,noauto_da_alloc,discard,journal_async_commit,data=ordered wait,check,encryptable=footer
 /dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID070  /cache               ext4    nosuid,nodev                                                                              wait,check
 
 /devices/soc0/e0000000.noc/ef010000.l2_noc/e1000000.ahb_per/e1400000.sd/mmc_host/mmc*    auto       auto      defaults      voldmanaged=sdcard1:auto,encryptable=userdata
