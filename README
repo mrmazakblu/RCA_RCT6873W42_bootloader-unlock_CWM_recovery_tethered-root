@@ -1,0 +1,8 @@
+This is for tracking changes to boot image and recovery for the RCA Voyager. Model RCT6873W42.
+
+I started with borrowed CWM recovery from Vampirefo, then with that recovery (it did not boot with all mounts or even a screen, but it provided a working root shell)
+
+I then used that rot shell to pull the stock boot and recovery images. 
+
+After making some changes to the fstab's in both recovery and boot, Now CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
+
