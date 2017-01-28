@@ -28,4 +28,4 @@ debug.atrace.tags.enableflags=0
 ro.bootimage.build.date=2016年 08月 31日 星期三 00:37:31 CST
 ro.bootimage.build.date.utc=1472575051
 ro.bootimage.build.fingerprint=RCA/RCT6873W42/RCT6873W42:6.0.1/MMB29M/hong07261054:user/release-keys
-persist.sys.usb.config=none
+persist.sys.usb.config=adb,mtp
