@@ -1,0 +1,2 @@
+#!/system/sh
+setenforce 0

@@ -17,10 +17,16 @@ echo [*] IF NO DEVICE LISTED YOU ARE NOT READY TO RUN THIS SCRIPT. CLOSE THIS WI
 echo [*] 
 echo [*] IF DEVICE IS LISTED PRESS ANY KEY ON COMPUTER TO START
 echo [*]
+echo adb wait-for-device
 adb wait-for-device
+echo adb devices
 adb devices
+echo adb reboot fastboot
 adb reboot fastboot
+echo timeout 10
 timeout 10
+echo fastboot boot rca-recovery-cwm-ramdisk.img
 fastboot boot rca-recovery-cwm-ramdisk.img
+echo pause
 pause
 exit
