@@ -6,3 +6,12 @@ I then used that rot shell to pull the stock boot and recovery images.
 
 After making some changes to the fstab's in both recovery and boot, Now CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
 
+
+
+As a head start to the point I am at I put together a batch file that has the steps I have taken automated. To use it download the release zip file, Unzip to a common folder, connect tablet with developer options turned on and usb debugging on and click "unlock-bootloader-RCA-flash-new -boot-recovery.bat" follow the prompts. 
+
+This will bring you to unlocked bootloader, modified boot.img and moddified recovery.img loaded.
+
+I also made a batch to reboot into fastboot, followed by booting into cwm recovery. (so far I have not been able to modify cwm far enough to be able to flash it internally.
+To use that batch, same as the unlock one, make sure batch file is in same folder as the recovery image and just click on it.
+
