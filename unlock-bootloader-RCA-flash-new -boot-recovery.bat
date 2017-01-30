@@ -17,7 +17,9 @@ echo [*] IF NO DEVICE LISTED YOU ARE NOT READY TO RUN THIS SCRIPT. CLOSE THIS WI
 echo [*] 
 echo [*] IF DEVICE IS LISTED PRESS ANY KEY ON COMPUTER TO START
 echo [*]
+echo adb wait-for-device
 adb wait-for-device
+echo adb devices
 adb devices
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
@@ -27,6 +29,7 @@ echo ---------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 echo [*] MAKE SURE YOUR ARE READY TO UNLOCK
 pause 
+echo adb reboot fastboot
 adb reboot fastboot
 timeout 10
 echo --------------------------------------------------------------------------------------------
@@ -35,24 +38,34 @@ echo [*] next we issue unlock and then you need to confirm with pushing volume b
 echo [*] one last chance to cancel 
 echo [*] CLOSE WINDOW IF YOU WANT TO CANCEL
 pause
+echo fastboot flashing unlock
 fastboot flashing unlock
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 echo [*] formating data and cache, after reboot you may see recovery android first
 echo [*] 
+echo fastboot format userdata
 fastboot format userdata
+echo fastboot format cache
 fastboot format cache
+echo fastboot reboot
 fastboot reboot
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 echo [*] MUST REMOVE USB CABLE AND LET COUNTDOWN TIMER ON SCREEN COTINUE
 echo [*] IF DEVICE POWERS OFF JUST HOLD POWER BUTTON TO TURN BACK ON
 echo [*] skip steps in setup then re-enable developer options and abd debugging
-adb reboot fastbot
+echo adb reboot fastboot
+adb reboot fastboot
+echo fastboot flash boot no-force-encrypt-boot.img
 fastboot flash boot no-force-encrypt-boot.img
+echo fastboot flash recovery no-force-encrypt-recovery.img
 fastboot flash recovery no-force-encrypt-recovery.img
+echo fastboot format userdata
 fastboot format userdata
+echo fastboot format cache
 fastboot format cache
+echo fastboot reboot
 fastboot reboot
 pause
 exit
