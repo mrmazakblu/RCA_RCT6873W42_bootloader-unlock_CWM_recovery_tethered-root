@@ -492,7 +492,10 @@ on boot
     setprop net.tcp.default_init_rwnd 60
 
     class_start core
-
+	
+	# root use permissive 
+	write /sys/fs/selinux/enforce 0
+	
 on nonencrypted
     class_start main
     class_start late_start
