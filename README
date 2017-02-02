@@ -2,9 +2,9 @@ This is for tracking changes to boot image and recovery for the RCA Voyager. Mod
 
 I started with borrowed CWM recovery from Vampirefo, then with that recovery (it did not boot with all mounts or even a screen, but it provided a working root shell)
 
-I then used that rot shell to pull the stock boot and recovery images. 
+I then used that root shell to pull the stock boot and recovery images. 
 
-After making some changes to the fstab's in both recovery and boot, Now CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
+After making some changes to the fstab's in both recovery and boot (changed "forceencrypt" to "encryptable" then did "fastboot format userdata"), CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
 
 
 
@@ -15,3 +15,10 @@ This will bring you to unlocked bootloader, modified boot.img and moddified reco
 I also made a batch to reboot into fastboot, followed by booting into cwm recovery. (so far I have not been able to modify cwm far enough to be able to flash it internally.
 To use that batch, same as the unlock one, make sure batch file is in same folder as the recovery image and just click on it.
 
+It needs to be stated that I have made backup with this recovery but when trying to do a restore, I was met with unable to mount /system.
+Now when try to reboot there is no /system on stock recovery or on main android. So then in fastboot I try to flash system and get sparce header error. At this point fastboot mode has half crashed("fastboot devices", returns with  "???????????????  fastboot" after long time  ~30-45seconds), and all fastboot commands fail.
+Now need to force shutdown by holding power button. Then boot into recovery (I have flashed a moddified stock recovery that has adb added)
+From recovery reboot to fastboot again. Then fastboot boot CWM recovery.
+This time in recovery format /system now works and restore completes. 
+
+Long process to get back to working. This has happened two(2) times now. The second time I just tried to format /system from cwm recovery, it gave a complete message but still failed to mount. So needed to go through fastboot again and fail to flash system in fastboot then back to recovery. Where I formated /system then restore worked. 
