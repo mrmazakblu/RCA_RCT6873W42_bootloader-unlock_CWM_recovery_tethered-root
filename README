@@ -22,3 +22,9 @@ From recovery reboot to fastboot again. Then fastboot boot CWM recovery.
 This time in recovery format /system now works and restore completes. 
 
 Long process to get back to working. This has happened two(2) times now. The second time I just tried to format /system from cwm recovery, it gave a complete message but still failed to mount. So needed to go through fastboot again and fail to flash system in fastboot then back to recovery. Where I formated /system then restore worked. 
+
+********
+
+I have continued testing on system restore with this recovery and have found that if you format /system with recovery before trying to 
+restore then , the restore will complete normally.
+
