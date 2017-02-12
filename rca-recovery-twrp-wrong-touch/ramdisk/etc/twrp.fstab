@@ -5,5 +5,5 @@
 /system  	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  	
 /data    	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069    	
   
-/sdcard datamedia /dev/null defaults;defaults
+#/sdcard datamedia /dev/null defaults;defaults
 /external_sd auto /dev/block/mmcblk1p1 defaults;defaults

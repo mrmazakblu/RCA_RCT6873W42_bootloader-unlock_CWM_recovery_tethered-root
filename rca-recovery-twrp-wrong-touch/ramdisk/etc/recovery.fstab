@@ -1,9 +1,22 @@
-/boot   	emmc   	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071   	
-/recovery 	emmc  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121 	    
-/misc    	emmc  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID074    	
-/cache   	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID070   	
-/system  	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  	
-/data    	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069    	
-  
-/sdcard datamedia /dev/null defaults;defaults
-/external_sd auto /dev/block/mmcblk1p1 defaults;defaults
+#
+# Copyright (C) 2013 Intel Mobile Communications GmbH
+#
+#      Sec Class: Intel Confidential (IC)
+#
+# Android fstab file.
+#<src>                         <mnt_point>  <type>  <mnt_flags and options>               <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+#
+
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  	/system              ext4    defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069  	/data                ext4    nosuid,nodev,nodiratime,noatime,noauto_da_alloc,discard,journal_async_commit,data=ordered wait,check,encryptable=footer
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID070 	/cache               ext4    defaults defaults
+/dev/block/mmcblk1p1                                            /storage/external_sd        vfat	/dev/block/mmcblk1 defaults
+/dev/block/sda1                                            	/mnt/usb_storage        vfat	defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID076  	/nvm_fs_partition    ext4    defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID074		/misc				 emmc    defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071		/boot				 emmc 	 defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121		/recovery			 emmc 	 defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID122		/fwu			 	 emmc 	 defaults defaults
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID034		/frp			 	 emmc 	 defaults defaults
