@@ -1,5 +1,5 @@
 ::Set our Window Title
-@title REBOOT RCA TO FASTBOOT AND THEN CWM
+@title REBOOT RCA TO FASTBOOT AND THEN TWRP
 mode 100,30
 ::Set our default parameters
 @echo off
