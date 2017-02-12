@@ -25,8 +25,8 @@ echo adb reboot fastboot
 adb reboot fastboot
 echo timeout 10
 timeout 10
-echo fastboot boot rca-recovery-twrp-wrong-touch.img
-fastboot boot rca-recovery-twrp-wrong-touch.img
+echo fastboot boot rca-twrp-wrong-touch-with-adb-data-fails-mount.img
+fastboot boot rca-twrp-wrong-touch-with-adb-data-fails-mount.img
 echo pause
 pause
 exit
