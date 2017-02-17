@@ -27,6 +27,15 @@ echo timeout 10
 timeout 10
 echo fastboot boot rca-recovery-cwm-ramdisk.img
 fastboot boot rca-recovery-cwm-ramdisk.img
-echo pause
+echo [*] 15 SECOND TIMEOUT TO ALLOW CWM TO LOAD ADBD
+timeout 15
+adb wait-for-device
+echo adb remount
+adb remount
+timeout 2
+echo adb push hosts--2-4-2017 /system/etc/hosts
+adb push hosts--2-4-2017 /system/etc/hosts
+echo [*] IF THERE WAS NO ERROR MESSAGE YOU HAVE JUST ADDED ADAWAY HOSTS
+echo [*] TO YOUR UNROOTED RCA TABLET. SAY GOODBYE TO ADS
 pause
 exit
