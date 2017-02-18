@@ -30,7 +30,7 @@ fastboot boot rca-recovery-cwm-ramdisk.img
 echo [*] 15 SECOND TIMEOUT TO ALLOW CWM TO LOAD ADBD
 timeout 15
 adb wait-for-device
-CHOICE  /C YN /T 10 /D N /M "Install Hosts FIle"
+CHOICE  /C YN /T 10 /D N /M "Do You Want To Install Hosts FIle Now ?"
 IF ERRORLEVEL 2 GOTO 20
 IF ERRORLEVEL 1 GOTO 10
 
