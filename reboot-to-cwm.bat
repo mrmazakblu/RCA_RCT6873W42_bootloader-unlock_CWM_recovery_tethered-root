@@ -30,6 +30,11 @@ fastboot boot rca-recovery-cwm-ramdisk.img
 echo [*] 15 SECOND TIMEOUT TO ALLOW CWM TO LOAD ADBD
 timeout 15
 adb wait-for-device
+CHOICE  /C YN /T 10 /D N /M "Install Hosts FIle"
+IF ERRORLEVEL 2 GOTO 20
+IF ERRORLEVEL 1 GOTO 10
+
+:10
 echo adb remount
 adb remount
 timeout 2
@@ -37,5 +42,13 @@ echo adb push hosts--2-4-2017 /system/etc/hosts
 adb push hosts--2-4-2017 /system/etc/hosts
 echo [*] IF THERE WAS NO ERROR MESSAGE YOU HAVE JUST ADDED ADAWAY HOSTS
 echo [*] TO YOUR UNROOTED RCA TABLET. SAY GOODBYE TO ADS
+GOTO End
+
+:20
+echo you chose not to instal hosts this timeout
+echo press any button to exit
+GOTO End
+
+:End
 pause
-exit
+end
