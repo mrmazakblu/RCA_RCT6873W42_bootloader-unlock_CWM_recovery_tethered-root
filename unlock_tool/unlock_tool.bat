@@ -1,40 +1,37 @@
 @echo off
 cd "%~dp0"
-IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
+IF EXIST "%~dp0\img" SET PATH=%PATH%;"%~dp0\img"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Setlocal EnableDelayedExpansion
-attrib +h "bin" >nul
+attrib +h "img" >nul
 if %errorlevel% neq 0 goto error
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
 echo( 
-echo ***************************************************
-echo *                                                 *
-cecho *      RCA Bootloader Unlock Tool                *{\n}
-cecho *                                                *{\n}
-cecho *                                                *{\n}
-cecho *                                                *{\n}
-echo *                                                 *
-echo ***************************************************
+echo 	***************************************************
+echo 	*                                                 *
+echo 	*      RCA Bootloader Unlock Tool                 *
+echo 	*                                                 *
+echo 	***************************************************
 echo(
-echo  Choose what you need to work on.
+echo 		 Choose what you need to work on.
 echo(
-echo ][********************************][
-cecho ][ {0B}1. UNLOCK BOOTLOADER        {#}   ][{\n}
-echo ][********************************][
-cecho ][ {0B}2. FLASH BOOT IMAGE         {#}   ][{\n}
-echo ][********************************][
-cecho ][ {0E}3. FLASH RECOVERY IMAGE        {#}][{\n}
-echo ][********************************][
-cecho ][ {0A}4.  LOAD INTO CWM      {#}        ][{\n}
-echo ][********************************][
-cecho ][ {0A}5.  Hosts                  {#}    ][{\n}
-echo ][********************************][
-echo ][ 6.  SEE INSTRUCTIONS           ][
-echo ][********************************][
-cecho ][ {0C}E.  EXIT           {#}            ][{\n}
-echo ][********************************][
+echo 		][********************************][
+echo 		][ 1. UNLOCK BOOTLOADER           ][
+echo 		][********************************][
+echo 		][ 2. FLASH BOOT IMAGE            ][
+echo 		][********************************][
+echo 		][ 3. FLASH RECOVERY IMAGE        ][
+echo 		][********************************][
+echo 		][ 4.  LOAD INTO CWM              ][
+echo 		][********************************][
+echo 		][ 5.  Hosts                      ][
+echo 		][********************************][
+echo 		][ 6.  SEE INSTRUCTIONS           ][
+echo 		][********************************][
+echo 		][ E.  EXIT                       ][
+echo 		][********************************][
 echo(
 set /p env=Type your option [1,2,3,4,5,6,E] then press ENTER: || set env="0"
 if /I %env%==1 goto bootloader
@@ -45,7 +42,7 @@ if /I %env%==5 goto hosts
 if /I %env%==6 goto instructions
 if /I %env%==E goto end
 echo(
-cecho {0C}%env% is not a valid option. Please try again! {#}{\n}
+echo %env% is not a valid option. Please try again! 
 PING -n 3 127.0.0.1>nul
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -107,8 +104,8 @@ cls
 SET RETURN=Label2
 GOTO adb_check
 :Label2
-echo fastboot flash boot no-force-encrypt-boot.img
-fastboot flash boot no-force-encrypt-boot.img
+echo fastboot flash boot img/no-force-encrypt-boot.img
+fastboot flash boot img/no-force-encrypt-boot.img
 CHOICE  /C YN /T 20 /D Y /M "Is This First time Flashing boot.img ?"
 IF ERRORLEVEL 2 GOTO 20
 IF ERRORLEVEL 1 GOTO 10
@@ -126,8 +123,8 @@ cls
 SET RETURN=Label3
 GOTO adb_check
 :Label3
-echo fastboot flash recovery no-force-encrypt-recovery.img
-fastboot flash recovery no-force-encrypt-recovery.img
+echo fastboot flash recovery img/no-force-encrypt-recovery.img
+fastboot flash recovery img/no-force-encrypt-recovery.img
 GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :CWM
@@ -135,9 +132,9 @@ cls
 SET RETURN=Label4
 GOTO adb_check
 :Label4
-echo fastboot boot rca-recovery-cwm-ramdisk.img
-fastboot boot rca-recovery-cwm-ramdisk.img
-::IF RETURN=Label4 GOTO main
+echo fastboot boot img/rca-recovery-cwm-ramdisk.img
+fastboot boot img/rca-recovery-cwm-ramdisk.img
+IF %RETURN%==Label4 GOTO main
 :: (emulated "Return")
 GOTO %RETURN%
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -166,6 +163,11 @@ echo [*] TO YOUR UNROOTED RCA TABLET. SAY GOODBYE TO ADS
 pause
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:error
+echo Image File not Found!!
+echo Check that you have unzipped the 
+echo whole Tool Package
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :end
 echo(
 for /f %%a in ("%~dp0\working\*") do del /q "%%a" >nul
