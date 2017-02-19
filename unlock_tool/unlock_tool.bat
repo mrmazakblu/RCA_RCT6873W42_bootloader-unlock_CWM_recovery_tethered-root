@@ -4,6 +4,9 @@ IF EXIST "%~dp0\img" SET PATH=%PATH%;"%~dp0\img"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Setlocal EnableDelayedExpansion
 attrib +h "img" >nul
+IF NOT EXIST "img\no-force-encrypt-boot.img" GOTO error1
+IF NOT EXIST "img\no-force-encrypt-recovery.img" GOTO error2
+IF NOT EXIST "img\rca-recovery-cwm-ramdisk.img" GOTO error3
 if %errorlevel% neq 0 goto error
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
@@ -167,6 +170,25 @@ goto main
 echo Image File not Found!!
 echo Check that you have unzipped the 
 echo whole Tool Package
+pause
+goto end
+:error1
+echo Boot.img not Found!!
+echo Check that you have unzipped the 
+echo whole Tool Package
+pause
+goto end
+:error2
+echo Recovery.img not Found!!
+echo Check that you have unzipped the 
+echo whole Tool Package
+pause
+goto end
+:error3
+echo CWM File not Found!!
+echo Check that you have unzipped the 
+echo whole Tool Package
+pause
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :end
 echo(
