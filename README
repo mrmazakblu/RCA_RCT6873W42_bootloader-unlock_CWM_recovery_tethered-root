@@ -7,7 +7,8 @@ I then used that root shell to pull the stock boot and recovery images.
 After making some changes to the fstab's in both recovery and boot (changed "forceencrypt" to "encryptable" then did "fastboot format userdata"), CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
 
 
-*********Unlock,recovery, add hosts tool has been created and is release v1.0
+*********Unlock,recovery, add hosts tool has been created and is available here https://www.androidfilehost.com/?fid=817550096634747825
+
 
 
 
