@@ -7,6 +7,9 @@ I then used that root shell to pull the stock boot and recovery images.
 After making some changes to the fstab's in both recovery and boot (changed "forceencrypt" to "encryptable" then did "fastboot format userdata"), CWM now boots from fastboot boot, unfortunatly it still does not run if flashed inside tablet.
 
 
+*********Unlock,recovery, add hosts tool has been created and is release v1.0
+
+
 
 As a head start to the point I am at I put together a batch file that has the steps I have taken automated. To use it download the release zip file, Unzip to a common folder, connect tablet with developer options turned on and usb debugging on and click "unlock-bootloader-RCA-flash-new -boot-recovery.bat" follow the prompts. 
 
