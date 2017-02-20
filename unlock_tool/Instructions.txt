@@ -2,3 +2,18 @@ TO BE EXPANDED SOON
 
 Follow steps in order. 1-3, 
 steps 4&5 are optional.
+
+**To use the tool Device must be connected with adb debugging enabled
+
+**After bootloader unlock device MUST be formated. 
+  DO NOT try to bypass this step
+
+**After flashing no-encrypt images MUST be formated also
+
+**Both FACTORY boot.img and recovery.img have "forceencrypt" flag set
+  this is why they need to be changed. 
+  BOTH boot and recovery ned to be changed together. Cannot do only one.
+  After replaceing boot.img data partition need to be formated.
+  
+  
+  

@@ -109,16 +109,10 @@ GOTO adb_check
 :Label2
 echo fastboot flash boot img/no-force-encrypt-boot.img
 fastboot flash boot img/no-force-encrypt-boot.img
-CHOICE  /C YN /T 20 /D Y /M "Is This First time Flashing boot.img ?"
-IF ERRORLEVEL 2 GOTO 20
-IF ERRORLEVEL 1 GOTO 10
-:10
 echo fastboot format userdata
 fastboot format userdata
 echo fastboot format cache
 fastboot format cache
-goto main
-:20
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :recovery
