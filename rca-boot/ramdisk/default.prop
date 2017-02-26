@@ -6,7 +6,8 @@ persist.ril-daemon.disable=1
 persist.radio.multisim.config=false
 persist.modem.disable=true
 ro.radio.noril=true
-ro.adb.secure=0
+# ro.adb.secure needs to be 1 so adb keys are created
+ro.adb.secure=1
 libc.cpumask=0x3
 ro.power_alarm.feature=false
 persist.sys.power_on=false
