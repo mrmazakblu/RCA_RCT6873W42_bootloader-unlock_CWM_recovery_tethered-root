@@ -198,6 +198,9 @@ on init
 
     # enable armv8_deprecated instruction hooks
     write /proc/sys/abi/swp 1
+	
+	# root use permissive 
+	write /sys/fs/selinux/enforce 0
 
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.

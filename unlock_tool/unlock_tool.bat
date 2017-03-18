@@ -107,8 +107,22 @@ cls
 SET RETURN=Label2
 GOTO adb_check
 :Label2
+echo [*] DEFAULT CHOISE OF Boot Has been set to Permissive
+CHOICE  /C 12 /T 10 /D 1 /M "Do You Want To Install 1=Permissive or 2=Enforcing Boot"
+IF ERRORLEVEL 2 GOTO 20
+IF ERRORLEVEL 1 GOTO 10
+
+:10
+echo you chose to instal Permissive Boot
+pause
+fastboot flash boot img/rca-boot_permissive-20170316-1706.img
+GOTO formatdata
+:20
+echo you chose to instal Original no-force-encrypt-enforceing boot
+pause
 echo fastboot flash boot img/no-force-encrypt-boot.img
 fastboot flash boot img/no-force-encrypt-boot.img
+:formatdata
 echo fastboot format userdata
 fastboot format userdata
 echo fastboot format cache
