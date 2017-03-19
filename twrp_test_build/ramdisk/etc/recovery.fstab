@@ -1,9 +1,0 @@
-/boot   	emmc   	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071   	None;length=0 flags=display="boot";backup=1
-/recovery 	emmc  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121 	    none;length=0 flags=display="recovery";backup=1
-#/misc    	emmc  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID074    	None;length=0
-#/cache   	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID070   	nosuid,nodev,noatime,barrier=1,journal_async_commit,data=ordered;length=0
-/system  	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  	ro,noatime;length=0
-/data    	ext4  	/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069    	nosuid,nodev,noatime,barrier=1,journal_async_commit,data=ordered,noauto_da_alloc,discard;length=-16384
- #/data      ext4    /dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069  	nosuid,nodev,nodiratime,noatime,noauto_da_alloc,discard,journal_async_commit,data=ordered wait,check,encryptable=footer
-#/sdcard datamedia /dev/null defaults;defaults
-/external_sd auto /dev/block/mmcblk1p1 defaults;defaults
