@@ -210,6 +210,7 @@ echo select "Download"
 echo select "UPDATE-SuperSU-v2.79-SYSTEMMODE.zip"
 echo select "yes" to install zip
 echo when done installing zip select "no" when CWM asks to fix root
+pause
 SET RETURN=Label7
 GOTO adb_check
 :Label7
