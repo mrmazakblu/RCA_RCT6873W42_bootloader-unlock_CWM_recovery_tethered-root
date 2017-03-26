@@ -104,20 +104,20 @@ echo fastboot flashing unlock
 fastboot flashing unlock
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
-echo [*] formating data and cache, after reboot you may see recovery android first
+:formatdata
 echo [*] 
 echo fastboot format userdata
 fastboot format userdata
 echo fastboot format cache
 fastboot format cache
-echo fastboot reboot
-fastboot reboot
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 echo [*] MUST REMOVE USB CABLE AND LET COUNTDOWN TIMER ON SCREEN COTINUE
 echo [*] IF DEVICE POWERS OFF JUST HOLD POWER BUTTON TO TURN BACK ON
 echo [*] skip steps in setup then re-enable developer options and abd debugging
 pause
+echo fastboot reboot is next
+fastboot reboot
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :boot
@@ -140,15 +140,7 @@ echo you chose to instal Original no-force-encrypt-enforceing boot
 pause
 echo fastboot flash boot img/no-force-encrypt-boot.img
 fastboot flash boot img/no-force-encrypt-boot.img
-:formatdata
-echo fastboot format userdata
-fastboot format userdata
-echo fastboot format cache
-fastboot format cache
-echo waiting here to read any output before rebooting
-pause 
-fastboot reboot 
-goto main
+GOTO formatdata
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :recovery
 cls
@@ -209,7 +201,10 @@ echo selrct "0"
 echo select "Download"
 echo select "UPDATE-SuperSU-v2.79-SYSTEMMODE.zip"
 echo select "yes" to install zip
-echo when done installing zip select "no" when CWM asks to fix root
+echo when done select go back
+echo select reboot system
+echo select "no" when CWM asks to fix root
+echo press any key when ready to start
 pause
 SET RETURN=Label7
 GOTO adb_check
@@ -218,10 +213,14 @@ SET RETURN=Label9
 goto Label4
 :Label9
 echo wait for recovery to fully load then press button to continue
+echo press any key to have adb remount before starting superSU install
 pause
+adb remount
 :: This line needs adjusting, it does not function as is yet
 :: 
 :: adb shell recovery --update_package=/sdcard/0/Download/UPDATE-SuperSU-v2.79-SYSTEMMODE.zip
+echo now safe to start the install step listed above
+echo press any button for tool to return to menu
 pause
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
