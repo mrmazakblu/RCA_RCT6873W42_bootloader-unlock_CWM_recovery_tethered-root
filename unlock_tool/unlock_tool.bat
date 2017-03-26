@@ -1,13 +1,28 @@
 @echo off
+if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
 cd "%~dp0"
 IF EXIST "%~dp0\img" SET PATH=%PATH%;"%~dp0\img"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Setlocal EnableDelayedExpansion
 attrib +h "img" >nul
+IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST "img\no-force-encrypt-boot.img" GOTO error1
 IF NOT EXIST "img\no-force-encrypt-recovery.img" GOTO error2
 IF NOT EXIST "img\rca-recovery-cwm-ramdisk.img" GOTO error3
 if %errorlevel% neq 0 goto error
+:start
+adb shell getprop ro.build.product > working\product.txt
+for /f %%i in ('FINDSTR "sofia3gr" working\product.txt') do set device=%%i
+echo %device%
+find "sofia3gr" "%~dp0\working\product.txt"
+if errorlevel 1 (
+    echo Not sofia3gr device
+	echo ending in 10 seconds
+	timeout 10
+	goto instructions
+) else (
+echo sofia3gr device ok to start tool)	
+timeout 5
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
@@ -33,16 +48,19 @@ echo 		][ 5.  Hosts                      ][
 echo 		][********************************][
 echo 		][ 6.  SEE INSTRUCTIONS           ][
 echo 		][********************************][
+echo 		][ 7.  Install SuperSU            ][
+echo 		][********************************][
 echo 		][ E.  EXIT                       ][
 echo 		][********************************][
 echo(
-set /p env=Type your option [1,2,3,4,5,6,E] then press ENTER: || set env="0"
+set /p env=Type your option [1,2,3,4,5,6,7,E] then press ENTER: || set env="0"
 if /I %env%==1 goto bootloader
 if /I %env%==2 goto boot
 if /I %env%==3 goto recovery
 if /I %env%==4 goto CWM
 if /I %env%==5 goto hosts
 if /I %env%==6 goto instructions
+if /I %env%==7 goto SuperSU
 if /I %env%==E goto end
 echo(
 echo %env% is not a valid option. Please try again! 
@@ -127,6 +145,9 @@ echo fastboot format userdata
 fastboot format userdata
 echo fastboot format cache
 fastboot format cache
+echo waiting here to read any output before rebooting
+pause 
+fastboot reboot 
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :recovery
@@ -136,6 +157,9 @@ GOTO adb_check
 :Label3
 echo fastboot flash recovery img/no-force-encrypt-recovery.img
 fastboot flash recovery img/no-force-encrypt-recovery.img
+echo waiting here to read any output before rebooting
+pause 
+fastboot reboot 
 GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :CWM
@@ -153,7 +177,7 @@ GOTO %RETURN%
 cls
 type "Instructions.txt"
 pause
-GOTO main
+GOTO start
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :hosts
 cls
@@ -171,6 +195,32 @@ echo adb push hosts--2-4-2017 /system/etc/hosts
 adb push hosts--2-4-2017 /system/etc/hosts
 echo [*] IF THERE WAS NO ERROR MESSAGE YOU HAVE JUST ADDED ADAWAY HOSTS
 echo [*] TO YOUR UNROOTED RCA TABLET. SAY GOODBYE TO ADS
+pause
+goto main
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:SuperSU
+echo pushing superSU to the internal storage
+adb push img/UPDATE-SuperSU-v2.79-SYSTEMMODE.zip /sdcard/Download/
+echo rebooting into CWM recovery.
+echo When fully loaded
+echo select "install zip"
+echo select "choose zip from /sdcard"
+echo selrct "0"
+echo select "Download"
+echo select "UPDATE-SuperSU-v2.79-SYSTEMMODE.zip"
+echo select "yes" to install zip
+echo when done installing zip select "no" when CWM asks to fix root
+SET RETURN=Label7
+GOTO adb_check
+:Label7
+SET RETURN=Label9
+goto Label4
+:Label9
+echo wait for recovery to fully load then press button to continue
+pause
+:: This line needs adjusting, it does not function as is yet
+:: 
+:: adb shell recovery --update_package=/sdcard/0/Download/UPDATE-SuperSU-v2.79-SYSTEMMODE.zip
 pause
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -202,3 +252,4 @@ pause
 echo(
 for /f %%a in ("%~dp0\working\*") do del /q "%%a" >nul
 PING -n 1 127.0.0.1>nul
+exit
