@@ -218,7 +218,7 @@ pause
 adb remount
 :: This line needs adjusting, it does not function as is yet
 :: 
-:: adb shell recovery --update_package=/sdcard/0/Download/UPDATE-SuperSU-v2.79-SYSTEMMODE.zip
+::adb shell recovery --update_package=/sdcard/0/Download/UPDATE-SuperSU-v2.79-SYSTEMMODE.zip
 echo now safe to start the install step listed above
 echo press any button for tool to return to menu
 pause
