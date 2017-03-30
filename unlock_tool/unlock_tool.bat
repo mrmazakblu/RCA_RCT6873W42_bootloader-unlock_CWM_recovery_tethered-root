@@ -102,8 +102,10 @@ echo [*] CLOSE WINDOW or Ctrl c IF YOU WANT TO CANCEL
 pause
 echo fastboot flashing unlock
 fastboot flashing unlock
+fastboot reboot
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
+goto main
 :formatdata
 echo [*] 
 echo fastboot format userdata
