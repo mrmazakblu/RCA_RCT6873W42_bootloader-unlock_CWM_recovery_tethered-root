@@ -50,7 +50,7 @@ Downloads:
 	2: type "fastboot flash boot rca-boot_permissive-20170316-1706.img"
 	*** /data now needs to be formated again to remove encryption
 	3: type "fastboot format userdata"
-	4: type "fastboot format userdata"
+	4: type "fastboot format cache"
 	5: reboot type "fastboot reboot"
 	
  C:   FLASH A MODIFIED "STOCK" RECOVERY (it has adb enabled for use as emergency acces into fastboot if needed)
