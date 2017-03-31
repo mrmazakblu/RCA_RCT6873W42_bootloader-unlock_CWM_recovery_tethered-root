@@ -1,4 +1,4 @@
-Four steps to root RCA Voyager RCT6873W42
+test one Four steps to root RCA Voyager RCT6873W42
 Pre-requirement.
 Downloads:
 	Download adb=fastboot 15 second instal == https://forum.xda-developers.com/showthread.php?t=2588979
