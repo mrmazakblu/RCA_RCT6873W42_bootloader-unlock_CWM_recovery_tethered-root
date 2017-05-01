@@ -12,8 +12,11 @@ IF NOT EXIST "img\rca-recovery-cwm-ramdisk.img" GOTO error3
 if %errorlevel% neq 0 goto error
 :start
 adb shell getprop ro.build.product > working\product.txt
+adb shell getprop ro.build.display.id >> working\product.txt
 for /f %%i in ('FINDSTR "sofia3gr" working\product.txt') do set device=%%i
+for /f %%i in ('FINDSTR "RCT6873W42" working\product.txt') do set build=%%i
 echo %device%
+echo %build%
 find "sofia3gr" "%~dp0\working\product.txt"
 if errorlevel 1 (
     echo Not sofia3gr device
@@ -22,6 +25,15 @@ if errorlevel 1 (
 	goto instructions
 ) else (
 echo sofia3gr device ok to start tool)	
+timeout 5
+find "-V19-V1." "%~dp0\working\product.txt"
+if errorlevel 1 (
+    echo Not confirmed build
+	echo ending in 10 seconds
+	timeout 10
+	exit
+) else (
+echo build confirmed ok to start tool)	
 timeout 5
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
@@ -38,13 +50,13 @@ echo(
 echo 		][********************************][
 echo 		][ 1. UNLOCK BOOTLOADER           ][
 echo 		][********************************][
-echo 		][ 2. FLASH BOOT IMAGE            ][
+echo 		][ 2. TEST BOOT PERMISSIVE        ][
 echo 		][********************************][
-echo 		][ 3. FLASH RECOVERY IMAGE        ][
+echo 		][ 3. FLASH BOOT IMAGE            ][
 echo 		][********************************][
-echo 		][ 4.  LOAD INTO CWM              ][
+echo 		][ 4. FLASH RECOVERY IMAGE        ][
 echo 		][********************************][
-echo 		][ 5.  Hosts                      ][
+echo 		][ 5. LOAD INTO CWM               ][
 echo 		][********************************][
 echo 		][ 6.  SEE INSTRUCTIONS           ][
 echo 		][********************************][
@@ -55,10 +67,10 @@ echo 		][********************************][
 echo(
 set /p env=Type your option [1,2,3,4,5,6,7,E] then press ENTER: || set env="0"
 if /I %env%==1 goto bootloader
-if /I %env%==2 goto boot
-if /I %env%==3 goto recovery
-if /I %env%==4 goto CWM
-if /I %env%==5 goto hosts
+if /I %env%==2 goto test-boot
+if /I %env%==3 goto boot
+if /I %env%==4 goto recovery
+if /I %env%==5 goto CWM
 if /I %env%==6 goto instructions
 if /I %env%==7 goto SuperSU
 if /I %env%==E goto end
@@ -102,10 +114,12 @@ echo [*] CLOSE WINDOW or Ctrl c IF YOU WANT TO CANCEL
 pause
 echo fastboot flashing unlock
 fastboot flashing unlock
+timeout 5
 fastboot reboot
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 goto main
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :formatdata
 echo [*] 
 echo fastboot format userdata
@@ -117,6 +131,7 @@ echo ---------------------------------------------------------------------------
 echo [*] MUST REMOVE USB CABLE AND LET COUNTDOWN TIMER ON SCREEN COTINUE
 echo [*] IF DEVICE POWERS OFF JUST HOLD POWER BUTTON TO TURN BACK ON
 echo [*] skip steps in setup then re-enable developer options and abd debugging
+echo [*] press any button to continue
 pause
 echo fastboot reboot is next
 fastboot reboot
@@ -173,23 +188,18 @@ type "Instructions.txt"
 pause
 GOTO start
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:hosts
+:test-boot
 cls
 SET RETURN=Label5
 GOTO adb_check
 :Label5
-SET RETURN=Label6
-GOTO Label4
-:Label6
-timeout 20
-echo adb remount
-adb remount
-timeout 2
-echo adb push hosts--2-4-2017 /system/etc/hosts
-adb push hosts--2-4-2017 /system/etc/hosts
-echo [*] IF THERE WAS NO ERROR MESSAGE YOU HAVE JUST ADDED ADAWAY HOSTS
-echo [*] TO YOUR UNROOTED RCA TABLET. SAY GOODBYE TO ADS
+echo fastboot boot img/rca-boot_permissive-20170316-1706.img
+fastboot boot img/rca-boot_permissive-20170316-1706.img
+echo(
+echo IF TABLET BOOTS WITH THIS IMAGE IT IS ASSUMED THAT IT WILL BE SAFE TO FLASH IT
 pause
+echo rebooting now
+adb reboot
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :SuperSU

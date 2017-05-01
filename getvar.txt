@@ -1,0 +1,67 @@
+(bootloader)  version-baseband: 24848
+(bootloader)  version-bootloader: BOOTCORE_VER
+(bootloader)  product: SF_3GR
+(bootloader)  secure: NO
+(bootloader)  unlocked: YES
+(bootloader)  device_state: unlocked
+(bootloader)  off-mode-charge: 1
+(bootloader)  ========== parition type ==========
+(bootloader)  system parition type: ext4
+(bootloader)  userdata parition type: ext4
+(bootloader)  cache parition type: ext4
+(bootloader)  hypervisor parition type: raw
+(bootloader)  boot parition type: raw
+(bootloader)  recovery parition type: raw
+(bootloader)  splash parition type: raw
+(bootloader)  mvconfig parition type: raw
+(bootloader)  secvm parition type: raw
+(bootloader)  vrl parition type: raw
+(bootloader)  psi parition type: raw
+(bootloader)  slb parition type: raw
+(bootloader)  ucode_patch parition type: raw
+(bootloader)  (null) parition type: raw
+(bootloader)  (null) parition type: raw
+(bootloader)  (null) parition type: raw
+(bootloader)  (null) parition type: raw
+(bootloader)  ===================================
+(bootloader)  ========== parition size ==========
+(bootloader)  system parition size: 0x00000000d0000000
+(bootloader)  userdata parition size: 0x00000002a6300000
+(bootloader)  cache parition size: 0x000000001a900000
+(bootloader)  hypervisor parition size: 0x0000000000400000
+(bootloader)  boot parition size: 0x0000000001000000
+(bootloader)  recovery parition size: 0x0000000001000000
+(bootloader)  splash parition size: 0x0000000001700000
+(bootloader)  mvconfig parition size: 0x0000000000100000
+(bootloader)  secvm parition size: 0x0000000000c00000
+(bootloader)  vrl parition size: 0x0000000000040000
+(bootloader)  psi parition size: 0x0000000000020000
+(bootloader)  slb parition size: 0x0000000000100000
+(bootloader)  ucode_patch parition size: 0x0000000000003000
+(bootloader)  (null) parition size: 0x0000000000020000
+(bootloader)  (null) parition size: 0x0000000000020000
+(bootloader)  (null) parition size: 0x0000000000020000
+(bootloader)  (null) parition size: 0x0000000000020000
+(bootloader)  ===================================
+(bootloader)  ========== has-slot ==========
+(bootloader)  system has-slot: no
+(bootloader)  userdata has-slot: no
+(bootloader)  cache has-slot: no
+(bootloader)  hypervisor has-slot: no
+(bootloader)  boot has-slot: no
+(bootloader)  recovery has-slot: no
+(bootloader)  splash has-slot: no
+(bootloader)  mvconfig has-slot: no
+(bootloader)  secvm has-slot: no
+(bootloader)  vrl has-slot: no
+(bootloader)  psi has-slot: no
+(bootloader)  slb has-slot: no
+(bootloader)  ucode_patch has-slot: no
+(bootloader)  (null) has-slot: no
+(bootloader)  (null) has-slot: no
+(bootloader)  (null) has-slot: no
+(bootloader)  (null) has-slot: no
+(bootloader)  ===================================
+(bootloader)  max-download-size: 0x3bb00000
+all: 
+finished. total time: 0.329s

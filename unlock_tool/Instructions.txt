@@ -32,13 +32,13 @@ either the Intel Android Bootloader device or the Android Bootloader Device, Bot
 
 
 
-
-Follow steps in order. 1-3, 
-steps 4 is to boot into recovery mode.
-step 5 is obsolete now that superSU can be installed
+Al steps assume starting from within android system with adb enabled
+Follow steps in order. 1-2, 
+If step 2 is sucsessfull continue to steps 3-4 
+step 5 is to boot into recovery mode.
 step 6 brings you back here to these instructions
 step 7 Pushes the superSU.zip install .zip to Download folder, then boots into CWM recovery and tells you steps to install it
-       there is a command to automate this but there is a bug ritght now, so it must be manually done.
+       there is a command to automate this but there is a bug right now, so it must be manually done.
 	   
 	   
 	   
