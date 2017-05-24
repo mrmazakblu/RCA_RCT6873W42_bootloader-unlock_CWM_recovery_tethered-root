@@ -50,7 +50,7 @@ Downloads:
 	
 	1: open cmd prompt type "adb reboot fastboot"
         2-a: type "fastboot boot rca-boot_permissive-20170316-1706.img"
-      ****If tablet booted it could be OK to do 2-d
+      ****If tablet booted it could be OK to do 2-b
       *****If did not boot then hold power button to turn off then back on
      
 *** If test boot was OK start at #1 and continue to 2-b
