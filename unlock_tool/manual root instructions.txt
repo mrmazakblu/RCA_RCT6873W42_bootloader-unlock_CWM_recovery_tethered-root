@@ -58,12 +58,14 @@ Downloads:
 
 	
 	1: open cmd prompt type "adb reboot fastboot"
-        2-a: type "fastboot boot rca-boot_permissive-20170316-1706.img"
+     v19   2-a: type "fastboot boot rca-boot_permissive-20170316-1706.img"
+     v31   2-a: type "fastboot boot  v31-test-rca-boot_permissive-20170709-2048.img"
       ****If tablet booted it could be OK to do 2-b
       *****If did not boot then hold power button to turn off then back on
      
 *** If test boot was OK start at #1 and continue to 2-b
-        2-b: type "fastboot flash boot rca-boot_permissive-20170316-1706.img"
+     v19   2-b: type "fastboot flash boot rca-boot_permissive-20170316-1706.img"
+	 v31   2-b: type "fastboot flash boot v31-test-rca-boot_permissive-20170709-2048.img"
 	*** /data now needs to be formated again to remove encryption
 	3: type "fastboot format userdata"
 	4: type "fastboot format cache"
@@ -73,7 +75,8 @@ Downloads:
 	***also need to flash modified "stock" recovery because if not and enter recovery after /data is decripted then it will get encripted again 
 	
 	1: open cmd prompt type "adb reboot fastboot"
-	2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
+	v19 2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
+	v31 2: type "fastboot flash recovery v31-no-force-encrypt-recovery-20170711-1919.img"
 	3: reboot type "fastboot reboot"
 	
  D:	  BOOT INTO CWM RECOVERY TO MAKE BACKUP AND FLASH SUPERSU
@@ -81,8 +84,9 @@ Downloads:
 	  
 	  
 	  1: open cmd prompt type "adb reboot fastboot"
-	  2: type "fastboot boot rca-recovery-cwm-ramdisk.img"
+	  v19 2: type "fastboot boot rca-recovery-cwm-ramdisk.img"
+	  v31 2: type "fastboot boot v31-test-rca-recovery-cwm-ramdisk-20170709-2052.img"
 	  3: once loaded recomend to make a backup.
 	  4: need to remount device in order to install superSU in cmd type "adb remount" (recovery is still not 100% correct)
-	  5: in cmd type "adb push UPDATE-SuperSU-v2.79-SYSTEMMODE.zip /sdcard/0/Download/"
+	  5: in cmd type "adb push UPDATE-SuperSU-v2.79-SYSTEMMODE.zip /sdcard/0/Download/"  
 	  6: then use CWM screens to navigate to the superSu.zip and install
