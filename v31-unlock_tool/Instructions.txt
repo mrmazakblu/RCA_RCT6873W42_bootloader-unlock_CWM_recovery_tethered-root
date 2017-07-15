@@ -1,0 +1,47 @@
+**To use the tool Device must be connected with adb debugging enabled
+
+**After bootloader unlock device MUST be formated. 
+  DO NOT try to bypass this step
+
+**After flashing no-encrypt images device MUST be formated also
+
+**Both FACTORY boot.img and recovery.img have "forceencrypt" flag set
+  this is why they need to be changed. 
+  BOTH boot and recovery need to be changed together. Cannot do only one.
+  After replaceing boot.img data partition need to be formated.
+
+First thing you must have adb and fastboot installed.
+  Easiest method to install adb + fastboot on windows is with "15 second adb + fastboot install TOOL"
+   https://forum.xda-developers.com/showthread.php?t=2588979
+  (Right click select mark to highlight and copy above link)  
+   
+Second you need drivers for Intel android usb
+
+   https://software.intel.com/en-us/protected-download/385047/494732
+	
+
+Adb driver for me has always installed automaticly. But Fastboot driver has needed to updated manually.
+I usually just go into command promt "adb reboot fastboot" .
+The Tab will reboot with an apparent blank screen, if you look closely you will note that there is a faint backlight. 
+Once in this mode your PC will have a new device in device manager, and you may have a repeated connect / disconnect sound.
+You can do an Update driver select Browse my computer for driver software, 
+then Let me pick from a List of device drivers on my computer, 
+then scroll down to the Intel Android Device in the list and select 
+either the Intel Android Bootloader device or the Android Bootloader Device, Both seem to work fine.
+
+
+
+
+All steps assume starting from within android system with adb enabled
+Follow steps in order. 1-2, 
+If step 2 is sucsessfull continue to steps 3-4 
+step 5 is to boot into recovery mode.
+step 6 brings you back here to these instructions
+step 7 Pushes the superSU.zip install .zip to Download folder, then boots into CWM recovery and tells you steps to install it
+       there is a command to automate this but there is a bug right now, so it must be manually done.
+	   
+	   
+	   
+  
+  
+  
