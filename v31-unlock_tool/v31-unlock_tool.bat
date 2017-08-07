@@ -7,7 +7,7 @@ Setlocal EnableDelayedExpansion
 attrib +h "img" >nul
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST "img\v31-test-rca-boot_permissive-20170709-2048.img" GOTO error1
-IF NOT EXIST "img\v31-no-force-encrypt-recovery-20170711-1919.img" GOTO error2
+IF NOT EXIST "img\w31-recovery-20170719-1816.img" GOTO error2
 IF NOT EXIST "img\v31-test-rca-recovery-cwm-ramdisk-20170709-2052.img" GOTO error3
 if %errorlevel% neq 0 goto error
 :start
@@ -163,8 +163,8 @@ cls
 SET RETURN=Label3
 GOTO adb_check
 :Label3
-echo fastboot flash recovery img/v31-no-force-encrypt-recovery-20170711-1919.img
-fastboot flash recovery img/v31-no-force-encrypt-recovery-20170711-1919.img
+echo fastboot flash recovery img/w31-recovery-20170719-1816.img
+fastboot flash recovery img/w31-recovery-20170719-1816.img
 echo waiting here to read any output before rebooting
 pause 
 fastboot reboot 
