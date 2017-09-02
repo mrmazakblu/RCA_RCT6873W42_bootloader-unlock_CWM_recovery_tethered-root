@@ -95,3 +95,69 @@ Downloads:
 	  4: need to remount device in order to install superSU in cmd type "adb remount" (recovery is still not 100% correct)
 	  5: in cmd type "adb push UPDATE-SuperSU-v2.79-SYSTEMMODE.zip /sdcard/0/Download/"  
 	  6: then use CWM screens to navigate to the superSu.zip and install
+
+	  
+*******************************************************************************************************************************
+*******************************************************************************************************************************
+*******************************************************************************************************************************
+
+IF YOUR BUILD NUMBER IS NOT ONE OF THE ONES LISTED, YOU MIGHT STILL BE ABLE TO USE THE CLOCKWORK RECOVERY TO PULL STOCK IMAGES
+TO BE USD TO MAKE A WORKING ROOT ON THE BUILD VERSION YOU HAVE.
+
+	  In this case follow these steps to get a root adb shell to pull stock images.
+	  
+	Pre-requirement.
+Need micro Sd card to copy files to.
+Downloads:
+	Download adb=fastboot 15 second instal == https://forum.xda-developers.com/showthread.php?t=2588979
+	Download intel drivers == https://software.intel.com/en-us/protected-download/385047/494732
+	Download SuperSu.zip  == https://forum.xda-developers.com/apps/supersu/v2-64-2-66-supersu-mode-t3286120
+	
+	use build v19
+	Download CWM recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634757883
+
+1. enable developer options on tablet. 
+	open settings, click on about device, tap "build number" 7-10 times. 
+
+2.	Go back to settings page.There is new option "Developer option"
+	open developer options and make sure "oem unlock" is checked and
+	"adb debugging" is checked.
+3. when usb cable is connected you should now get a pop up window on tablet asking permission to connect to pc
+	allow the connection
+	
+4. Adb and fastboot installed on pc. 
+	
+5. Drivers for intel device.
+	Adb driver for me has always installed automaticly. But Fastboot driver has needed to updated manually.
+	I usually just go into command promt "adb reboot fastboot" .
+	The Tab will reboot with an apparent blank screen, if you look closely you will note that there is a faint backlight. 
+	Once in this mode your PC will have a new device in device manager, and you may have a repeated connect / disconnect sound.
+	You can do an Update driver select Browse my computer for driver software, 
+	then Let me pick from a List of device drivers on my computer, 
+	then scroll down to the Intel Android Device in the list and select 
+	either the Intel Android Bootloader device or the Android Bootloader Device, Both seem to work fine.
+ 
+  **in the following steps if a file is mentioned in an adb line or fastboot line then file location needs to be amended to the command.***
+  
+ A:  UNLOCK BOOT LOADER
+ 
+    1: Open cmd promtp type "adb reboot fastboot"
+	2: Verify connected to fastboot by typing "fastboot devices"
+	3: If connection verified type "fastboot flashing unlock"
+	4: tablet screen should have message to confirm unlock by pressing volume button
+	5: reboot tablet "fastboot reboot"
+	6: factory recovery should boot and complete the unlock by doing a factory reset
+	7: after bootloader is unlocked everytime you boot there will be a message complaining 
+	   about device is now untrusted, let the 30 second timer count down
+
+	   
+ B:   Boot CWM RECOVERY
+      ****DO NOT FLASH THIS RECOVERY------ ONLY BOOT IT*********
+	  ****SCREEN IS NOT EXPECTED TO SHOW RECOVERY--BLANK SCREEN IS EXPECTED***
+	  
+	  1: open cmd prompt type "adb reboot fastboot"
+	  2: type "fastboot boot rca-recovery-cwm-ramdisk.img"
+	  3: adb shell mount external_sd
+      4: adb shell mkdir /external_sd/RCA
+      5: adb shell dd if=/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071 of=/external_sd/RCA/mmcblk0p9-boot.img
+  
