@@ -81,7 +81,7 @@ Downloads:
 	
 	1: open cmd prompt type "adb reboot fastboot"
 	v19 2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
-	v31 2: type "fastboot flash recovery v31-no-force-encrypt-recovery-20170711-1919.img"
+	v31 2: type "fastboot flash recovery w31-recovery-20170719-1816.img"
 	3: reboot type "fastboot reboot"
 	
  D:	  BOOT INTO CWM RECOVERY TO MAKE BACKUP AND FLASH SUPERSU
