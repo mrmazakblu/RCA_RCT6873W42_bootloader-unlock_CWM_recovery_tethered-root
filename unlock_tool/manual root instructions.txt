@@ -18,7 +18,7 @@ Downloads:
 	
 	build v31
 	Download boot.img build V31 == https://www.androidfilehost.com/?fid=817550096634785276
-	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=673368273298970757
+	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=889764386195918822
 	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=961840155545581102
 	
 	
