@@ -18,7 +18,7 @@ Downloads:
 	
 	build v31
 	Download boot.img build V31 == https://www.androidfilehost.com/?fid=817550096634785276
-	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=673368273298970757
+	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=889764386195918822
 	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=961840155545581102
 	
 	
@@ -81,7 +81,7 @@ Downloads:
 	
 	1: open cmd prompt type "adb reboot fastboot"
 	v19 2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
-	v31 2: type "fastboot flash recovery v31-no-force-encrypt-recovery-20170711-1919.img"
+	v31 2: type "fastboot flash recovery w31-recovery-20170719-1816.img"
 	3: reboot type "fastboot reboot"
 	
  D:	  BOOT INTO CWM RECOVERY TO MAKE BACKUP AND FLASH SUPERSU
@@ -111,7 +111,6 @@ Need micro Sd card to copy files to.
 Downloads:
 	Download adb=fastboot 15 second instal == https://forum.xda-developers.com/showthread.php?t=2588979
 	Download intel drivers == https://software.intel.com/en-us/protected-download/385047/494732
-	Download SuperSu.zip  == https://forum.xda-developers.com/apps/supersu/v2-64-2-66-supersu-mode-t3286120
 	
 	use build v19
 	Download CWM recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634757883
