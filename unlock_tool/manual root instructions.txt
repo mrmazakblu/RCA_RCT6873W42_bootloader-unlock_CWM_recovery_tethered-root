@@ -1,6 +1,6 @@
 Four steps to root RCA Voyager RCT6873W42
 
-**THERE ARE THREE KNOWN BUILD VERSIONS V19, V21, and V31**
+**THERE ARE TWO KNOWN BUILD VERSIONS V19 and V31**
 **THE DIRECTIONS ARE THE SAME FOR THE TWO BUT*****
 **THEY NEED DIFFERENT IMAGES YOU MUST USE THE ****
 **CORRECT IMAGE FOR YOUR BUILD..!!!!**************
@@ -11,20 +11,16 @@ Downloads:
 	Download intel drivers == https://software.intel.com/en-us/protected-download/385047/494732
 	Download SuperSu.zip  == https://forum.xda-developers.com/apps/supersu/v2-64-2-66-supersu-mode-t3286120
 	
-  Build V19
+	build v19
 	Download boot.img build V19 == https://www.androidfilehost.com/?fid=529152257862710918
 	Download modified "stock" recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634745162
 	Download CWM recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634757883
 	
-  Build V31
+	build v31
 	Download boot.img build V31 == https://www.androidfilehost.com/?fid=817550096634785276
 	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=673368273298970757
 	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=961840155545581102
 	
-  Build V21
-	Download boot.img build V31 == https://www.androidfilehost.com/?fid=746010030569949111
-	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=818070582850488194
-	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=962187416754456047
 	
 1. enable developer options on tablet. 
 	open settings, click on about device, tap "build number" 7-10 times. 
@@ -47,7 +43,7 @@ Downloads:
 	then scroll down to the Intel Android Device in the list and select 
 	either the Intel Android Bootloader device or the Android Bootloader Device, Both seem to work fine.
  
-  **in the following steps when a file is mentioned in an adb line or fastboot line then file location needs to be amended to the command.***
+  **in the following steps if a file is mentioned in an adb line or fastboot line then file location needs to be amended to the command.***
   
  A:  UNLOCK BOOT LOADER
  
@@ -59,18 +55,8 @@ Downloads:
 	6: factory recovery should boot and complete the unlock by doing a factory reset
 	7: after bootloader is unlocked everytime you boot there will be a message complaining 
 	   about device is now untrusted, let the 30 second timer count down
-
- B:   FLASH A MODIFIED "STOCK" RECOVERY (it has adb enabled for use as emergency acces into fastboot if needed)
-	***also need to flash modified "stock" recovery because if not and enter recovery after /data is decripted then it will get encripted again 
-	
-	1: open cmd prompt type "adb reboot fastboot"
-   *v19 2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
-   *v31 2: type "fastboot flash recovery v31-no-force-encrypt-recovery-20170711-1919.img"
-   *v21 2: type "fastboot flash recovery voyager-V21-modified-stock-recovery.img"
-	3: reboot type "fastboot reboot"
-	4: reboot to recovey, make sure adb is working there. Either by adb command "adb reboot recovery" or button combo
-	
- C:	 FLASH A MODIFIED PERMISSIVE BOOT.IMG
+	   
+ B:	 FLASH A MODIFIED PERMISSIVE BOOT.IMG
    **Modified boot.img changes tablet from force-encrition of /data to  encriptable /data (needed to simplify un-bricking)**	
 	***Do a test boot of boot.img before flashing***
    Doing step 2-a will test if tablet boots with the supplied image(an error message about encryption is expected) it may suggest doing a factory reset to fix. As this was just a test do not do that factory reset.
@@ -78,20 +64,25 @@ Downloads:
 	
 	1: open cmd prompt type "adb reboot fastboot"
      v19   2-a: type "fastboot boot rca-boot_permissive-20170316-1706.img"
-     v31   2-a: type "fastboot boot v31-test-rca-boot_permissive-20170709-2048.img"
-     v21   2-a: type "fastboot boot rca-voyager-V21-boot.img"
-	 ****If tablet booted it could be OK to do 2-b
+     v31   2-a: type "fastboot boot  v31-test-rca-boot_permissive-20170709-2048.img"
+      ****If tablet booted it could be OK to do 2-b
       *****If did not boot then hold power button to turn off then back on
      
 *** If test boot was OK start at #1 and continue to 2-b
      v19   2-b: type "fastboot flash boot rca-boot_permissive-20170316-1706.img"
 	 v31   2-b: type "fastboot flash boot v31-test-rca-boot_permissive-20170709-2048.img"
-	 v21   2-a: type "fastboot flash boot rca-voyager-V21-boot.img"
-	 *** /data now needs to be formated again to remove encryption
+	*** /data now needs to be formated again to remove encryption
 	3: type "fastboot format userdata"
 	4: type "fastboot format cache"
 	5: reboot type "fastboot reboot"
 	
+ C:   FLASH A MODIFIED "STOCK" RECOVERY (it has adb enabled for use as emergency acces into fastboot if needed)
+	***also need to flash modified "stock" recovery because if not and enter recovery after /data is decripted then it will get encripted again 
+	
+	1: open cmd prompt type "adb reboot fastboot"
+	v19 2: type "fastboot flash recovery rca-recovery-adb-NO-ENCRYPT.img"
+	v31 2: type "fastboot flash recovery v31-no-force-encrypt-recovery-20170711-1919.img"
+	3: reboot type "fastboot reboot"
 	
  D:	  BOOT INTO CWM RECOVERY TO MAKE BACKUP AND FLASH SUPERSU
       ****DO NOT FLASH THIS RECOVERY------ ONLY BOOT IT*********
@@ -100,7 +91,6 @@ Downloads:
 	  1: open cmd prompt type "adb reboot fastboot"
 	  v19 2: type "fastboot boot rca-recovery-cwm-ramdisk.img"
 	  v31 2: type "fastboot boot v31-test-rca-recovery-cwm-ramdisk-20170709-2052.img"
-	  v21 2: type "fastboot boot rca-voyager-V21-CWM-recovery.img"
 	  3: once loaded recomend to make a backup.
 	  4: need to remount device in order to install superSU in cmd type "adb remount" (recovery is still not 100% correct)
 	  5: in cmd type "adb push UPDATE-SuperSU-v2.79-SYSTEMMODE.zip /sdcard/0/Download/"  
@@ -123,11 +113,9 @@ Downloads:
 	Download intel drivers == https://software.intel.com/en-us/protected-download/385047/494732
 	Download SuperSu.zip  == https://forum.xda-developers.com/apps/supersu/v2-64-2-66-supersu-mode-t3286120
 	
-	use build v19 files as base files
-	Download boot.img build V19 == https://www.androidfilehost.com/?fid=529152257862710918
-	Download modified "stock" recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634745162
+	use build v19
 	Download CWM recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634757883
-    
+
 1. enable developer options on tablet. 
 	open settings, click on about device, tap "build number" 7-10 times. 
 
@@ -172,33 +160,4 @@ Downloads:
 	  3: adb shell mount external_sd
       4: adb shell mkdir /external_sd/RCA
       5: adb shell dd if=/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071 of=/external_sd/RCA/mmcblk0p9-boot.img
-	  6: adb shell dd if=/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121 of=/external_sd/RCA/mmcblk0p10-recovery.img
-	  7: Download "carliv image kitchen tool" From https://forum.xda-developers.com/android/development/tool-cika-carliv-image-kitchen-android-t3013658
-	  8: Use carliv to unpack your stock recovery and boot images
-	  9: Add downloaded V19 images to carliv resourse folders (recovery to recovery resource, boot to boot resource)
-	  10: Unpack all images
-	  11: Copy "recovery.img-kernel" and "recovery.img-second" from your stock recovery folder to the unpacked CWM folder.
-	  12: repack CWM
-	  13: copy "/ramdisk/sbin/adbd" from v19 boot folder to your boot folder
-	  14: copy "/ramdisk/sepolicy" from v19 boot folder to your boot folder
-	  15: copy "/ramdisk/init.rc" from v19 boot folder to your boot folder
-	  16: copy "/ramdisk/default.prop" from v19 boot folder to your boot folder
-	  17: copy "/ramdisk/fstab.sofiaboard_emmc" from v19 boot folder to your boot folder
-	  18: copy "/ramdisk/fstab.sofiaboard_nand" from v19 boot folder to your boot folder
-	  19: repack your boot.img
-	  20: Stock recovery edit /ramdisk/default.prop with following changes
-	  a. "ro.secure=1" change to "ro.secure=0"
-	  b. "ro.debuggable=0" change to "ro.debuggable=1"
-	  c. "persist.sys.usb.config=none" change to "persist.sys.usb.config=mtp,adb"
-	       ADD these lines
-		 persist.service.adb.enable=1                                                    
-		 persist.service.debuggable=1
-	  21: repack stock recovery.
-
-Test boot your new boot.img 
-Test boot the cwm recovery.
-Flash the modified stock recovery and test if adb works.
-
-If these steps work follow the directions from above useing your new img files.
-
-	  
+  
