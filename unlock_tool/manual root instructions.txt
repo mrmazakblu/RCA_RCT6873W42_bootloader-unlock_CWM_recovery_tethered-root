@@ -22,9 +22,9 @@ Downloads:
 	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=961840155545581102
 	
   Build V21
-	Download boot.img build V31 == https://www.androidfilehost.com/?fid=746010030569949111
-	Download modified "stock" recovery.img build V31  == https://www.androidfilehost.com/?fid=818070582850488194
-	Download CWM recovery.img build V31  == https://www.androidfilehost.com/?fid=962187416754456047
+	Download boot.img build V21 == https://www.androidfilehost.com/?fid=746010030569949111
+	Download modified "stock" recovery.img build V21  == https://www.androidfilehost.com/?fid=818070582850488194
+	Download CWM recovery.img build V21  == https://www.androidfilehost.com/?fid=962187416754456047
 	
 1. enable developer options on tablet. 
 	open settings, click on about device, tap "build number" 7-10 times. 
