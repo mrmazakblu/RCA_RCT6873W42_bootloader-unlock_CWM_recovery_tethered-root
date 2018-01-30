@@ -1,0 +1,25 @@
+**
+**
+This Patcher.bat is for RCA Voyager tablet with intel soc
+
+It is intended to be used to root this device.
+The RCA Voyager has many different builds, most to all of them with different hardware.
+I have built this around my own build number.
+RCT6873W42-ANDROID6.0-V19-V1.16.50-E04
+
+I expect it would work on most RCT6873W42 builds. 
+If you are only utilizing the "boot" functions to test, It "should" be safe to try with other builds.
+
+
+The batch "tool" does the following
+
+1. Performs the commands needed to unlock bootlader. (you need to make sure your drivers are installed)
+
+2. Boots to cwm to get root shell. (cwm might not display screen for you but it supposed to have active ADBD)
+
+3. The batch downloads boot.img and recovery.img from device while in the booted cwm.
+
+4. Interactive menus walk you through unpacking and Patching the images.
+   unpacking utilizes carlivs android image kitchen scripts
+   
+
