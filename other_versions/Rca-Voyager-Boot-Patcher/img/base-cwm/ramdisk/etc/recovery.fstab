@@ -1,0 +1,9 @@
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071   	/boot   	emmc   	defaults defaults                                                                                    	length=0     
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121 	    /recovery 	emmc  	defaults defaults                                            	                                        length=0      
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID074    	/misc    	emmc  	defaults defaults                                                                                    	length=0     
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID070   	/cache   	ext4  	defaults defaults                        	length=0     
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID068  	/system  	ext4  	defaults defaults                                                                              	length=0     
+/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID069    	/data    	ext4  	nosuid,nodev,nodiratime,noatime,noauto_da_alloc,discard,journal_async_commit,data=ordered wait,check,encryptable=footer	length=-16384
+  
+/dev/null /sdcard datamedia defaults defaults
+/dev/block/mmcblk1p1 /external_sd auto defaults defaults
