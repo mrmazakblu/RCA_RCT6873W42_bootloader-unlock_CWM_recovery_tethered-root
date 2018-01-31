@@ -1,11 +1,14 @@
 Four steps to root RCA Voyager RCT6873W42
 
-**THERE ARE THREE KNOWN BUILD VERSIONS V19, V21, and V31**
-**THE DIRECTIONS ARE THE SAME FOR THE TWO BUT*****
-**THEY NEED DIFFERENT IMAGES YOU MUST USE THE ****
-**CORRECT IMAGE FOR YOUR BUILD..!!!!**************
+**THERE ARE THREE BUILD VERSIONS V19, V21, and V31**
+**With prebuilt images.**
 
-Pre-requirement.
+  New method of pulling images off your own device and patching them is described at the bottom or page.
+  Also new batch file "tool" was created to make process easier.
+  Patching is made possible by including "CARLIV android kitchen" script inside this tool.
+
+
+Pre-requirement for manually installing prebuilt files.
 Downloads:
 	Download adb=fastboot 15 second instal == https://forum.xda-developers.com/showthread.php?t=2588979
 	Download intel drivers == https://software.intel.com/en-us/protected-download/385047/494732
@@ -83,7 +86,7 @@ Downloads:
      ****If tablet booted it could be OK to do 2-b
       *****If did not boot then hold power button to turn off then back on
      
-*** If test boot was OK start at #1 and continue to 2-b
+*** If test boot was OK start over at #1 and continue to 2-b
      v19   2-b: type "fastboot flash boot rca-boot_permissive-20170316-1706.img"
 	 v31   2-b: type "fastboot flash boot v31-test-rca-boot_permissive-20170709-2048.img"
 	 v21   2-a: type "fastboot flash boot rca-voyager-V21-boot.img"																
@@ -110,7 +113,7 @@ Downloads:
 *******************************************************************************************************************************
 *******************************************************************************************************************************
 
-IF YOUR BUILD NUMBER IS NOT ONE OF THE ONES LISTED, YOU MIGHT STILL BE ABLE TO USE THE CLOCKWORK RECOVERY TO PULL STOCK IMAGES
+IF YOUR BUILD NUMBER IS NOT ONE OF THE ONES WITH PREBUILT FILES, YOU MIGHT STILL BE ABLE TO USE THE CLOCKWORK RECOVERY TO PULL STOCK IMAGES
 TO BE USD TO MAKE A WORKING ROOT ON THE BUILD VERSION YOU HAVE.
 
 	  In this case follow these steps to get a root adb shell to pull stock images.
@@ -125,7 +128,7 @@ Downloads:
 	Download boot.img build V19 == https://www.androidfilehost.com/?fid=529152257862710918
 	Download modified "stock" recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634745162
 	Download CWM recovery.img build V19 == https://www.androidfilehost.com/?fid=817550096634757883
-    
+    Download "carliv image kitchen tool" From https://forum.xda-developers.com/android/development/tool-cika-carliv-image-kitchen-android-t3013658
 1. enable developer options on tablet. 
 	open settings, click on about device, tap "build number" 7-10 times. 
 
@@ -171,7 +174,7 @@ Downloads:
       4: adb shell mkdir /external_sd/RCA
       5: adb shell dd if=/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID071 of=/external_sd/RCA/mmcblk0p9-boot.img
 	  6: adb shell dd if=/dev/block/platform/soc0/e0000000.noc/by-name/ImcPartID121 of=/external_sd/RCA/mmcblk0p10-recovery.img
-	  7: Download "carliv image kitchen tool" From https://forum.xda-developers.com/android/development/tool-cika-carliv-image-kitchen-android-t3013658
+	  7: adb pull external_sd/RCA %userprofile%\downloads
 	  8: Use carliv to unpack your stock recovery and boot images
 	  9: Add downloaded V19 images to carliv resourse folders (recovery to recovery resource, boot to boot resource)
 	  10: Unpack all images
@@ -199,4 +202,8 @@ Flash the modified stock recovery and test if adb works.
 
 If these steps work follow the directions from above useing your new img files.
 
+Using the new patch tool, the results are cleaner. Your boot.img build date, 
+and signature line do not get changed. Using this manual method listed above 
+might cause trouble , with just swapping init.rc and default.prop from different 
+device.
 	  
