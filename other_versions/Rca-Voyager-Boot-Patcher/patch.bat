@@ -14,24 +14,32 @@ attrib +h "repack_img.bat" >nul
 attrib +h "unpack_img.bat" >nul
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST output mkdir "%~dp0\output"
+set device=NOT_SET
+set build=NOT_SET
 adb shell getprop ro.build.product > working\product.txt
 adb shell getprop ro.build.display.id >> working\product.txt
 for /f %%i in ('FINDSTR "sofia3gr" working\product.txt') do set device=%%i
 for /f %%i in ('FINDSTR "RCT6873W42" working\product.txt') do set build=%%i
-echo %device%
-echo %build%
+echo(
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+cecho   * Your Build Product says it is a {0D}%device%{#}         *{\n}
+cecho   * Your Build Device Type is {01}%build%{#}               *{\n}
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+pause
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 find "sofia3gr" "%~dp0\working\product.txt" >nul
 if errorlevel 1 (
-    echo Not sofia3gr device
-	echo Closing in 10 seconds
+    echo   ***************************************************
+	cecho   *   {0A}Not sofia3gr device{#}                           *{\n}
+	cecho   *   {0C}Closing in 10 seconds{#}                         *{\n}
+	echo   ***************************************************
 	timeout 10
 	goto end
 ) else (
-echo sofia3gr device)	
+echo %device% device)	
 echo( 
 echo   ***************************************************
-cecho   * {0B}DEFAULT CHOISE HAS BEEN SET TO "RCT6873W42"{#}     *{\n}
+cecho   * {0B}DEFAULT CHOICE HAS BEEN SET TO "RCT6873W42"{#}     *{\n}
 cecho   * {0E}DEFAULT Timeout will continue in 15 seconds"{#}    *{\n}
 echo   ***************************************************
 echo( 
@@ -57,7 +65,7 @@ cls
 echo( 
 echo 	***************************************************
 echo 	*                                                 *
-cecho 	*      RCA Bootloader Unlock Tool{#}                 *{\n}
+cecho 	*      {0C}RCA Bootloader Unlock Tool{#}                 *{\n}
 echo 	*                                                 *
 echo 	***************************************************
 echo(
@@ -204,6 +212,7 @@ IF EXIST recovery.img (
 IF EXIST stock-recovery\recovery.img* (
 	mkdir stock-recovery\ramdisk\data\misc\adb
 	copy %userprofile%\.android\adbkey.pub stock-recovery\ramdisk\data\misc\adb\adb_keys
+	copy %userprofile%\.android\adbkey.pub stock-recovery\ramdisk\adb_keys
 	fart\fart.exe stock-recovery\ramdisk\default.prop ro.secure=1 ro.secure=0
 	fart\fart.exe stock-recovery\ramdisk\default.prop ro.debuggable=0 ro.debuggable=1
 	fart\fart.exe stock-recovery\ramdisk\default.prop persist.sys.usb.config=none persist.sys.usb.config=mtp,adb
@@ -233,6 +242,9 @@ goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :patch_boot
 IF EXIST stock-boot\boot.img* (
+	mkdir stock-boot\ramdisk\data\misc\adb
+	copy %userprofile%\.android\adbkey.pub stock-boot\ramdisk\data\misc\adb\adb_keys
+	copy %userprofile%\.android\adbkey.pub stock-boot\ramdisk\adb_keys
 	copy img\boot_files stock-boot\ramdisk
 	copy img\boot_files\sbin stock-boot\ramdisk\sbin
 	fart\fart.exe stock-boot\ramdisk\default.prop ro.secure=1 ro.secure=0
