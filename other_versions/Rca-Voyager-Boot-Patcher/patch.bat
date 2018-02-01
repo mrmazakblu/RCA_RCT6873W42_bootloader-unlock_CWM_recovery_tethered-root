@@ -1,6 +1,9 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
 cd "%~dp0"
+set tool-folder=%~dp0
+for /f "delims=" %%a in ('wmic os get LocalDateTime  ^| findstr ^[0-9]') do set "dt=%%a"
+set "timestamp=%dt:~0,8%-%dt:~8,4%"	
 for /f %%a in ("%~dp0\working\*") do del /q "%%a" >nul
 IF EXIST "%~dp0\img" SET PATH=%PATH%;"%~dp0\img"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
@@ -14,8 +17,7 @@ attrib +h "repack_img.bat" >nul
 attrib +h "unpack_img.bat" >nul
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST output mkdir "%~dp0\output"
-set device=NOT_SET
-set build=NOT_SET
+IF NOT EXIST patched-imgs mkdir "%~dp0\patched-imgs"
 adb shell getprop ro.build.product > working\product.txt
 adb shell getprop ro.build.display.id >> working\product.txt
 for /f %%i in ('FINDSTR "sofia3gr" working\product.txt') do set device=%%i
@@ -25,7 +27,6 @@ cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#
 cecho   * Your Build Product says it is a {0D}%device%{#}         *{\n}
 cecho   * Your Build Device Type is {01}%build%{#}               *{\n}
 cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
-pause
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 find "sofia3gr" "%~dp0\working\product.txt" >nul
 if errorlevel 1 (
@@ -34,9 +35,8 @@ if errorlevel 1 (
 	cecho   *   {0C}Closing in 10 seconds{#}                         *{\n}
 	echo   ***************************************************
 	timeout 10
-	goto end
 ) else (
-echo %device% device)	
+	echo %device% device)	
 echo( 
 echo   ***************************************************
 cecho   * {0B}DEFAULT CHOICE HAS BEEN SET TO "RCT6873W42"{#}     *{\n}
@@ -50,8 +50,10 @@ IF ERRORLEVEL 1 GOTO 10
 :10
 find "RCT6873W42" "%~dp0\working\product.txt" >nul
 if errorlevel 1 (
-    echo Not RCT6873W42 build
-	echo Closing in 10 seconds
+    echo   ***************************************************
+	cecho   *   {02}Not RCT6873W42 device{#}                          *{\n}
+	cecho   *   {05}Closing in 10 seconds{#}                         *{\n}
+	echo   ***************************************************
 	timeout 10
 	goto end
 ) else (
@@ -219,11 +221,12 @@ IF EXIST stock-recovery\recovery.img* (
 	echo( >> stock-recovery\ramdisk\default.prop
 	echo persist.service.adb.enable=1 >> stock-recovery\ramdisk\default.prop                                                   
 	echo persist.service.debuggable=1 >> stock-recovery\ramdisk\default.prop
-	for /f %%a in ("%~dp0\output\*recovery*") do del /q "%%a" >nul
+	IF EXIST output\*recovery* del output\*recovery*
 	call repack_img.bat "stock-recovery"
 	cd output
 	ren *recovery*.img recovery.img
 	cd ..
+	copy output\recovery.img patched-imgs\recovery_%timestamp%.img
 	cecho {0E}Scroll up to see if any errors{#}{\n}
 	pause
 	goto main
@@ -254,11 +257,12 @@ IF EXIST stock-boot\boot.img* (
 	fart\fart.exe stock-boot\ramdisk\fstab.sofiaboard_nand forceencrypt encryptable
 	call jrepl "on init" "on init~	# root use Permissive~	write /sys/fs/selinux/enforce 0~" /M /l /f "stock-boot\ramdisk\init.rc" /o -
 	call jrepl "~" "\n" /M /X /f "stock-boot\ramdisk\init.rc" /o -
-	for /f %%a in ("%~dp0\output\*boot*") do del /q "%%a" >nul
+	IF EXIST output\*boot* del output\*boot*
 	call repack_img.bat "stock-boot"
 	cd output
 	ren *boot*.img boot.img
 	cd ..
+	copy output\boot.img "patched-imgs\boot_%timestamp%.img"
 	cecho {0E}Scroll up to see if any errors{#}{\n}
 	pause
 	goto main
@@ -271,15 +275,16 @@ IF EXIST stock-boot\boot.img* (
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :patch_cwm
 IF EXIST stock-recovery\recovery.img-kernel (
-	mkdir patched-cwm
-	xcopy img\base-cwm patched-cwm /s /e /h
+	IF NOT EXIST patched-cwm mkdir patched-cwm
+	xcopy /y img\base-cwm patched-cwm /s /e /h
 	copy stock-recovery\recovery.img-kernel patched-cwm
 	copy stock-recovery\recovery.img-second patched-cwm
-	for /f %%a in ("%~dp0\output\*cwm*") do del /q "%%a" >nul
+	IF EXIST output\*cwm* del output\*cwm*
 	call repack_img.bat "patched-cwm"
 	cd output
 	ren *cwm*.img cwm.img
 	cd ..
+	copy output\cwm.img patched-imgs\cwm_%timestamp%.img
 	cecho {0C}Scroll up to see if any errors{#}{\n}
 	pause
 	goto main
