@@ -1,14 +1,50 @@
 @echo off
 if not defined in_subprocess (cmd /k set in_subprocess=y ^& %0 %*) & exit )
 cd "%~dp0"
-set tool-folder=%~dp0
+Setlocal EnableDelayedExpansion
 for /f "delims=" %%a in ('wmic os get LocalDateTime  ^| findstr ^[0-9]') do set "dt=%%a"
 set "timestamp=%dt:~0,8%-%dt:~8,4%"	
-for /f %%a in ("%~dp0\working\*") do del /q "%%a" >nul
+IF EXIST "working" rd /s/q "working\"
 IF EXIST "%~dp0\img" SET PATH=%PATH%;"%~dp0\img"
 IF EXIST "%~dp0\bin" SET PATH=%PATH%;"%~dp0\bin"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-Setlocal EnableDelayedExpansion
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+echo( 
+echo   ***************************************************
+cecho   * {0B}MULTI PLATFORM ANDROID BOOT AND RECOVERY PORT{#}   *{\n}
+cecho   * {0E}                       TOOL{#}                      *{\n}
+echo   ***************************************************
+echo( 
+CHOICE  /C 12 /M "Which TYPE soc is Device 1=MTK or 2=Intel"
+IF ERRORLEVEL 2 GOTO Intel-soc
+IF ERRORLEVEL 1 GOTO MTK-soc
+:Intel-soc
+	set intended-device=sofia3gr
+	set soc-type=intel
+	set option-3=Flash
+	set option-5=superSU
+	set version-string=display.id
+	set fastboot-cmd=fastboot
+	set unlock-cmd=flashing unlock
+	set recovery-type=CWM
+	set fstab1=fstab.sofiaboard_emmc
+	set fstab2=fstab.sofiaboard_nand
+	goto start
+:MTK-soc
+	set intended-device=MTK
+	set soc-type=MTK
+	set option-3=Boot
+	set option-5=TWRP
+	set version-string=flavor
+	set fastboot-cmd=bootloader
+	set unlock-cmd=oem unlock
+	set recovery-type=TWRP
+	set fstab1=fstab.mt6735
+	set fstab2=
+	goto start
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:start
 attrib +h "img" >nul
 attrib +h "bin" >nul
 attrib +h "fart" >nul
@@ -18,56 +54,20 @@ attrib +h "unpack_img.bat" >nul
 IF NOT EXIST working mkdir "%~dp0\working"
 IF NOT EXIST output mkdir "%~dp0\output"
 IF NOT EXIST patched-imgs mkdir "%~dp0\patched-imgs"
-adb shell getprop ro.build.product > working\product.txt
-adb shell getprop ro.build.display.id >> working\product.txt
-for /f %%i in ('FINDSTR "sofia3gr" working\product.txt') do set device=%%i
-for /f %%i in ('FINDSTR "RCT6873W42" working\product.txt') do set build=%%i
 echo(
 cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
-cecho   * Your Build Product says it is a {0D}%device%{#}         *{\n}
-cecho   * Your Build Device Type is {01}%build%{#}               *{\n}
+adb shell getprop ro.build.product 
+adb shell getprop ro.build.%version-string%
 cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+timeout 6
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-find "sofia3gr" "%~dp0\working\product.txt" >nul
-if errorlevel 1 (
-    echo   ***************************************************
-	cecho   *   {0A}Not sofia3gr device{#}                           *{\n}
-	cecho   *   {0C}Closing in 10 seconds{#}                         *{\n}
-	echo   ***************************************************
-	timeout 10
-) else (
-	echo %device% device)	
-echo( 
-echo   ***************************************************
-cecho   * {0B}DEFAULT CHOICE HAS BEEN SET TO "RCT6873W42"{#}     *{\n}
-cecho   * {0E}DEFAULT Timeout will continue in 15 seconds"{#}    *{\n}
-echo   ***************************************************
-echo( 
-CHOICE  /C 12 /T 15 /D 1 /M "Is this Device RCA Voyager RCT6873W42 1=Yes or 2=No"
-IF ERRORLEVEL 2 GOTO 20
-IF ERRORLEVEL 1 GOTO 10
-
-:10
-find "RCT6873W42" "%~dp0\working\product.txt" >nul
-if errorlevel 1 (
-    echo   ***************************************************
-	cecho   *   {02}Not RCT6873W42 device{#}                          *{\n}
-	cecho   *   {05}Closing in 10 seconds{#}                         *{\n}
-	echo   ***************************************************
-	timeout 10
-	goto end
-) else (
-echo RCT6873W42 build)	
-timeout 5
-:20
-GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :main
 cls
 echo( 
 echo 	***************************************************
 echo 	*                                                 *
-cecho 	*      {0C}RCA Bootloader Unlock Tool{#}                 *{\n}
+cecho 	*      {0C}%intended-device% Boot Patch Tool{#}                 *{\n}
 echo 	*                                                 *
 echo 	***************************************************
 echo(
@@ -76,7 +76,7 @@ echo(
 echo 		][********************************][
 cecho 		][ {0A}1.  UNLOCK BOOTLOADER{#}          ][{\n}
 echo 		][********************************][
-cecho 		][ {0B}2.  LOAD INTO CWM pull IMG{#}     ][{\n}
+cecho 		][ {0B}2.  LOAD INTO %recovery-type% pull IMG{#}     ][{\n}
 echo 		][********************************][
 cecho 		][ {0C}3.  UNPACK RECOVERY{#}            ][{\n}
 echo 		][********************************][
@@ -86,21 +86,21 @@ cecho 		][ {0E}5.  PATCH BOOT{#}                 ][{\n}
 echo 		][********************************][
 cecho 		][ {0A}6.  PATCH RECOVERY{#}             ][{\n}
 echo 		][********************************][
-cecho 		][ {0B}7.  PATCH CWM{#}                  ][{\n}
+cecho 		][ {0B}7.  PATCH %recovery-type%{#}                 ][{\n}
 echo 		][********************************][
-cecho 		][ {0C}8.  Flash MENU{#}                 ][{\n}
+cecho 		][ {0C}8.  FLASH MENU{#}                 ][{\n}
 echo 		][********************************][
 cecho 		][ {0D}E.  EXIT{#}                       ][{\n}
 echo 		][********************************][
 echo(
 set /p env=Type your option [1,2,3,4,5,6,7,8,E] then press ENTER: || set env="0"
 if /I %env%==1 goto bootloader
-if /I %env%==2 goto CWM
+if /I %env%==2 goto %recovery-type%
 if /I %env%==3 goto unpack_stock_recovery
 if /I %env%==4 goto unpack_stock_boot
 if /I %env%==5 goto patch_boot
 if /I %env%==6 goto patch_stock_recovery
-if /I %env%==7 goto patch_cwm
+if /I %env%==7 goto patch_%recovery-type%
 if /I %env%==8 goto flash-menu
 if /I %env%==E goto end
 echo(
@@ -115,7 +115,7 @@ if errorlevel 1 (
 GOTO fastboot_check
 ) else (
     echo Found ADB!
-	adb reboot fastboot
+	adb reboot %fastboot-cmd%
 	timeout 10)
 GOTO fastboot_check
 ::::::::::::::::::::::::::::::
@@ -131,26 +131,80 @@ goto main
 GOTO %RETURN%
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :bootloader
-cls 
-SET RETURN=Label1
+cls
+SET RETURN=Label-bootloader
 GOTO adb_check
-:Label1
-echo --------------------------------------------------------------------------------------------
-echo --------------------------------------------------------------------------------------------
-echo [*] next we issue unlock and then you need to confirm with pushing volume button
-echo [*] one last chance to cancel 
-echo [*] CLOSE WINDOW or Ctrl c IF YOU WANT TO CANCEL
-echo fastboot flashing unlock
-echo you need to hold volume up on tablet then press any key to continue
+:Label-bootloader
+:::::::::::::::::::::::::::::::::::
+::checking the getvar output to verify if phone is unlocked aready
+:::::::::::::::::::::::::::::::::::::
+fastboot getvar all 2> "%~dp0\working\getvar.txt"
+find "unlocked: yes" /i "%~dp0\working\getvar.txt"
+if errorlevel 1 (
+    echo Not Unlocked 
+GOTO continue_unlock
+) else (
+    echo Already UNLOCKED)
+echo continue to TWRP option, you are alread unlocked
 pause
-fastboot flashing unlock
-timeout 15
-:formatdata
-echo [*] 
-echo fastboot format userdata
+fastboot reboot
+GOTO main
+:continue_unlock
+:::::::::::::::::::::::::::::::::::
+::checking the get_unlock_ability output string to verify it is greater than "0" because "0" is unlockable
+::::::::::::::::::::::::::::::::::::
+fastboot flashing get_unlock_ability 2> "%~dp0\working\unlockability.txt"
+IF %soc-type%==intel GOTO intel
+IF %soc-type%==MTK GOTO MTK
+:MTK
+for /f "tokens=4" %%i in ('findstr "^(bootloader) unlock_ability" "%~dp0\working\unlockability.txt"') do set unlock=%%i
+echo output from find string = %unlock%
+if %unlock% gtr 1 ( 
+	echo unlockable
+	pause
+	GOTO Continue
+) else (
+	echo Not-unlockable
+	pause
+	GOTO main)
+:intel
+	find "The device can be unlocked" /i "%~dp0\working\unlockability.txt"
+if errorlevel 1 (
+    echo Not Unlockable
+	pause
+	GOTO main
+) else (
+	echo unlockable
+	pause
+	GOTO Continue)
+:Continue
+echo [*] ON YOUR PHONE YOU WILL SEE 
+echo [*] PRESS THE VOLUME UP/DOWN BUTTONS TO SELECT YES OR NO
+echo [*] JUST PRESS VOLUME UP TO START THE UNLOCK PROCESS.
+echo.-------------------------------------------------------------------------
+echo.-------------------------------------------------------------------------
+pause
+pause
+fastboot %unlock-cmd%
+:format-data
+timeout 5
 fastboot format userdata
-echo fastboot format cache
+timeout 5
 fastboot format cache
+timeout 5
+fastboot reboot
+IF %soc-type%==intel GOTO intel-comment
+IF %soc-type%==MTK GOTO MTK-comment
+:MTK-comment
+echo [*]         IF PHONE DID NOT REBOOT ON ITS OWN 
+echo [*]         HOLD POWER BUTTON UNTILL IT TURNS OFF
+echo [*]         THEN TURN IT BACK ON
+echo [*]         EITHER WAY YOU SHOULD SEE ANDROID ON HIS BACK 
+echo [*]         WHEN PHONE BOOTS, FOLLOWED BY STOCK RECOVERY 
+echo [*]         DOING A FACTORY RESET
+pause
+GOTO main
+:intel-comment
 echo --------------------------------------------------------------------------------------------
 echo --------------------------------------------------------------------------------------------
 echo [*] MUST REMOVE USB CABLE AND LET COUNTDOWN TIMER ON SCREEN COTINUE
@@ -158,13 +212,7 @@ echo [*] IF DEVICE POWERS OFF JUST HOLD POWER BUTTON TO TURN BACK ON
 echo [*] skip steps in setup then re-enable developer options and abd debugging
 echo [*] press any button to continue
 pause
-echo fastboot reboot is next
-fastboot reboot
-goto main
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-echo --------------------------------------------------------------------------------------------
-echo --------------------------------------------------------------------------------------------
-goto main
+GOTO main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :CWM
 IF EXIST boot.img (
@@ -178,8 +226,8 @@ cls
 SET RETURN=Label4
 GOTO adb_check)
 :Label4
-echo fastboot boot img\v19-cwm.img
-fastboot boot img\v19-cwm.img
+echo fastboot boot CWM.img
+fastboot boot CWM.img
 cecho {0A}YOU NEED EXTERNAL SD INSERTED INTO TABLET FOR NEXT STEP TO WORK{#}{\n}
 cecho {0E}YOU NEED EXTERNAL SD INSERTED INTO TABLET FOR NEXT STEP TO WORK{#}{\n}
 cecho {0E}IT IS EXPECTED THAT THE DEVICE SCREEN MAY NOT BE ON DURING THIS STEP{#}{\n}
@@ -194,6 +242,19 @@ timeout 10
 cecho {0C}TABLET IS REBOOTING PLEASE GIVE IT SOME TIME{#}{\n}
 adb reboot
 pause
+goto main
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:TWRP
+cls
+echo(
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+cecho   *  {0D}this function is not programed yet{#}         *{\n}
+cecho   *  {01}ON INTEL DEVICE THIS WOULD LOAD CWM EVEN WITH WRONG KERNEL{#}               *{\n}
+cecho   *  {01}BUT WOULD NOT HAVE DISPLAY BENIFIT WAS IT STILL HAD WORKING ROOT ADB{#}               *{\n}
+cecho   *  {01}THAT ROOT SHELL COULD BE USED TO PULL STOCK PARTITIONS {#}               *{\n}
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+echo( 
+timeout 15
 goto main
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -211,13 +272,21 @@ IF EXIST recovery.img (
 	goto main)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :patch_stock_recovery
+cls
+echo(
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+cecho   *  {0D}PATCHING STOCK RECOVERY IS ONLY INTENDED TO MAKE AVAILABLE{#}         *{\n}
+cecho   *  {01}ADB REBOOT FROM STOCK RECOVERY__USED TO GET INTO BOOTLOADR MODE IF NEEDED{#}               *{\n}
+cecho   {01}****{#}{02}***{#}{03}***{#}{04}****{#}{05}***{#}{06}***{#}{07}****{#}{08}***{#}{09}***{#}{0A}****{#}{0B}***{#}{0C}***{#}{0D}****{#}{0E}***{#}{0F}***{#}*{\n}
+pause
 IF EXIST stock-recovery\recovery.img* (
 	mkdir stock-recovery\ramdisk\data\misc\adb
 	copy %userprofile%\.android\adbkey.pub stock-recovery\ramdisk\data\misc\adb\adb_keys
 	copy %userprofile%\.android\adbkey.pub stock-recovery\ramdisk\adb_keys
-	fart\fart.exe stock-recovery\ramdisk\default.prop ro.secure=1 ro.secure=0
-	fart\fart.exe stock-recovery\ramdisk\default.prop ro.debuggable=0 ro.debuggable=1
-	fart\fart.exe stock-recovery\ramdisk\default.prop persist.sys.usb.config=none persist.sys.usb.config=mtp,adb
+	call jrepl "ro.secure=1" "ro.secure=0" /M /l /f "stock-recovery\ramdisk\default.prop" /o -
+	call jrepl "ro.debuggable=0" "ro.debuggable=1" /M /l /f "stock-recovery\ramdisk\default.prop" /o -
+	call jrepl "persist.sys.usb.config=mtp" "persist.sys.usb.config=mtp,adb" /M /l /f "stock-recovery\ramdisk\default.prop" /o -
+	call jrepl "persist.sys.usb.config=none" "persist.sys.usb.config=mtp,adb" /M /l /f "stock-recovery\ramdisk\default.prop" /o -
 	echo( >> stock-recovery\ramdisk\default.prop
 	echo persist.service.adb.enable=1 >> stock-recovery\ramdisk\default.prop                                                   
 	echo persist.service.debuggable=1 >> stock-recovery\ramdisk\default.prop
@@ -248,13 +317,16 @@ IF EXIST stock-boot\boot.img* (
 	mkdir stock-boot\ramdisk\data\misc\adb
 	copy %userprofile%\.android\adbkey.pub stock-boot\ramdisk\data\misc\adb\adb_keys
 	copy %userprofile%\.android\adbkey.pub stock-boot\ramdisk\adb_keys
-	copy img\boot_files stock-boot\ramdisk
-	copy img\boot_files\sbin stock-boot\ramdisk\sbin
-	fart\fart.exe stock-boot\ramdisk\default.prop ro.secure=1 ro.secure=0
-	fart\fart.exe stock-boot\ramdisk\default.prop ro.debuggable=0 ro.debuggable=1
-	fart\fart.exe stock-boot\ramdisk\default.prop persist.sys.usb.config=none persist.sys.usb.config=adb
-	fart\fart.exe stock-boot\ramdisk\fstab.sofiaboard_emmc forceencrypt encryptable
-	fart\fart.exe stock-boot\ramdisk\fstab.sofiaboard_nand forceencrypt encryptable
+	copy img\boot_files_%soc-type% stock-boot\ramdisk
+	copy img\boot_files_%soc-type%\sbin stock-boot\ramdisk\sbin
+	call jrepl "ro.secure=1" "ro.secure=0" /M /l /f "stock-boot\ramdisk\default.prop" /o -
+	call jrepl "ro.debuggable=0" "ro.debuggable=1" /M /l /f "stock-boot\ramdisk\default.prop" /o -
+	call jrepl "persist.sys.usb.config=mtp" "persist.sys.usb.config=mtp,adb" /M /l /f "stock-boot\ramdisk\default.prop" /o -
+	call jrepl "persist.sys.usb.config=none" "persist.sys.usb.config=mtp,adb" /M /l /f "stock-boot\ramdisk\default.prop" /o -
+	call jrepl "forceencrypt" "encryptable" /M /l /f "stock-boot\ramdisk\%fstab1%" /o -
+	call jrepl "forceencrypt" "encryptable" /M /l /f "stock-boot\ramdisk\%fstab2%" /o -
+	echo persist.service.adb.enable=1 >> stock-boot\ramdisk\default.prop 
+	echo persist.service.debuggable=1 >> stock-boot\ramdisk\default.prop
 	call jrepl "on init" "on init~	# root use Permissive~	write /sys/fs/selinux/enforce 0~" /M /l /f "stock-boot\ramdisk\init.rc" /o -
 	call jrepl "~" "\n" /M /X /f "stock-boot\ramdisk\init.rc" /o -
 	IF EXIST output\*boot* del output\*boot*
@@ -273,18 +345,22 @@ IF EXIST stock-boot\boot.img* (
 	goto main
 	)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:patch_cwm
+:patch_CWM
+:patch_TWRP
+cls 
 IF EXIST stock-recovery\recovery.img-kernel (
-	IF NOT EXIST patched-cwm mkdir patched-cwm
-	xcopy /y img\base-cwm patched-cwm /s /e /h
-	copy stock-recovery\recovery.img-kernel patched-cwm
-	copy stock-recovery\recovery.img-second patched-cwm
-	IF EXIST output\*cwm* del output\*cwm*
-	call repack_img.bat "patched-cwm"
+	IF NOT EXIST patched-%recovery-type% mkdir patched-%recovery-type%
+	call unpack_img.bat %recovery-type%.img patched-%recovery-type%
+	echo Scroll up to see if any errors
+	pause
+	copy stock-recovery\recovery.img-kernel patched-%recovery-type%\%recovery-type%.img-kernel
+	copy stock-recovery\recovery.img-second patched-%recovery-type%\%recovery-type%.img-second
+	IF EXIST output\*%recovery-type%* del output\*%recovery-type%*
+	call repack_img.bat "patched-%recovery-type%"
 	cd output
-	ren *cwm*.img cwm.img
+	ren *%recovery-type%*.img %recovery-type%.img
 	cd ..
-	copy output\cwm.img patched-imgs\cwm_%timestamp%.img
+	copy output\%recovery-type%.img patched-imgs\%recovery-type%_%timestamp%.img
 	cecho {0C}Scroll up to see if any errors{#}{\n}
 	pause
 	goto main
@@ -300,7 +376,7 @@ cls
 echo( 
 echo 	***************************************************
 echo 	*                                                 *
-cecho 	*      {0E}RCA Bootloader Unlock Tool{#}                 *{\n}
+cecho 	*      {0E}%intended-device% Unlock Tool{#}                 *{\n}
 echo 	*                                                 *
 echo 	***************************************************
 echo(
@@ -311,11 +387,11 @@ cecho 		][ {0E}1.  TEST BOOT PATCHED-BOOT{#}     ][{\n}
 echo 		][********************************][
 cecho 		][ {0A}2.  FLASH PATCHED-BOOT{#}         ][{\n}
 echo 		][********************************][
-cecho 		][ {0B}3.  FLASH PATCHED RECOVERY{#}     ][{\n}
+cecho 		][ {0B}3.  %option-3% PATCHED RECOVERY{#}     ][{\n}
 echo 		][********************************][
-cecho 		][ {0D}4.  BOOT CWM{#}                   ][{\n}
+cecho 		][ {0D}4.  BOOT %recovery-type%{#}                   ][{\n}
 echo 		][********************************][
-cecho 		][ {0E}5.  FLASH SuperSU{#}              ][{\n}
+cecho 		][ {0E}5.  FLASH %option-5%{#}                 ][{\n}
 echo 		][********************************][
 cecho 		][ {0C}6.  MAIN MENU{#}                  ][{\n}
 echo 		][********************************][
@@ -325,9 +401,9 @@ echo(
 set /p env=Type your option [1,2,3,4,5,6,E] then press ENTER: || set env="0"
 if /I %env%==1 goto test-boot
 if /I %env%==2 goto flash-boot
-if /I %env%==3 goto flash-recovery
-if /I %env%==4 goto load-cwm
-if /I %env%==5 goto flash-superSU
+if /I %env%==3 goto %option-3%-recovery
+if /I %env%==4 goto load-%recovery-type%
+if /I %env%==5 goto flash-%option-5%
 if /I %env%==6 goto main
 if /I %env%==E goto end
 echo(
@@ -375,8 +451,22 @@ pause
 pause
 echo fastboot flash boot output\boot.img
 fastboot flash boot output\boot.img
-GOTO formatdata
-:flash-recovery
+echo You have flashed modified boot.img
+echo If device had encrypted /data then
+echo /data needs to be formated. This means
+echo ALL your downloaded files and pictures
+echo Will be removed.
+echo( 
+CHOICE  /C 12 /T 10 /D 1 /M "Continue to format DATA? 1=Yes or 2=No"
+IF ERRORLEVEL 2 GOTO 200
+IF ERRORLEVEL 1 GOTO 100
+:200
+echo Format canceled
+pause
+GOTO main
+:100
+GOTO format-data
+:Boot-recovery
 IF NOT EXIST output\recovery.img (
 	cecho {0E}RECOVERY.IMG NOT FOUND{#}{\n}
 	cecho {0B}MAKE SURE YOU HAVE PATCHED IMAGE FIRST OPTION 6 on MAIN MENU{#}{\n}
@@ -384,9 +474,26 @@ IF NOT EXIST output\recovery.img (
 	goto main
 ) else (
 	cls
-	SET RETURN=Label3
+	SET RETURN=Labelboot
 	GOTO adb_check)
-:Label3
+:Labelboot
+echo fastboot boot output\recovery.img
+fastboot boot output\recovery.img
+echo waiting here to read any output before rebooting
+echo continue if no errors seen
+pause 
+goto flash-menu
+:Flash-recovery
+IF NOT EXIST output\recovery.img (
+	cecho {0E}RECOVERY.IMG NOT FOUND{#}{\n}
+	cecho {0B}MAKE SURE YOU HAVE PATCHED IMAGE FIRST OPTION 6 on MAIN MENU{#}{\n}
+	pause
+	goto main
+) else (
+	cls
+	SET RETURN=Labelflash
+	GOTO adb_check)
+:Labelflash
 echo fastboot flash recovery output\recovery.img
 fastboot flash recovery output\recovery.img
 echo waiting here to read any output before rebooting
@@ -394,9 +501,10 @@ echo continue if no errors seen
 pause 
 fastboot reboot 
 goto flash-menu
-:load-cwm
-IF NOT EXIST output\cwm.img (
-	cecho {0E}CWM.IMG NOT FOUND{#}{\n}
+:load-TWRP
+:load-CWM
+IF NOT EXIST output\%recovery-type%.img (
+	cecho {0E}%recovery-type%.IMG NOT FOUND{#}{\n}
 	cecho {0B}MAKE SURE YOU HAVE PATCHED IMAGE FIRST OPTION 7 on MAIN MENU{#}{\n}
 	pause
 	goto main
@@ -405,14 +513,28 @@ cls
 SET RETURN=Label6
 GOTO adb_check)
 :Label6
-echo fastboot boot output\cwm.img
-fastboot boot output\cwm.img
+echo fastboot boot output\%recovery-type%.img
+fastboot boot output\%recovery-type%.img
 IF %RETURN%==Label6 GOTO flash-menu
-:: (emulated "Return")
 GOTO %RETURN%
+:flash-TWRP
+cls
+SET RETURN=Label7
+GOTO adb_check
+:Label7
+SET RETURN=Labeltwrp
+fastboot flash recovery output\%recovery-type%.img
+GOTO Label6
+:Labeltwrp
+echo Swipe to allow modification
+timeout 15
+adb reboot recovery
+timeout 15
+adb reboot
+GOTO main
 :flash-superSU
-IF NOT EXIST output\cwm.img (
-	cecho {0E}CWM.IMG NOT FOUND{#}{\n}
+IF NOT EXIST output\%recovery-type%.img (
+	cecho {0E}%recovery-type%.IMG NOT FOUND{#}{\n}
 	cecho {0B}MAKE SURE YOU HAVE PATCHED IMAGE FIRST OPTION 7 on MAIN MENU{#}{\n}
 	pause
 	goto main
@@ -432,11 +554,11 @@ IF NOT EXIST output\cwm.img (
 	echo select "no" when CWM asks to fix root
 	echo press any key when ready to start
 	pause)
-SET RETURN=Label7
+SET RETURN=Labelsupersu
 GOTO adb_check
-:Label7
+:Labelsupersu
 SET RETURN=Label9
-goto Label6
+GOTO Label6
 :Label9
 echo wait for recovery to fully load then press button to continue
 echo press any key to have adb remount before starting superSU install
