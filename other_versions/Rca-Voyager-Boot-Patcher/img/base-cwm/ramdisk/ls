@@ -1,3 +1,0 @@
-alias ls='busybox ls --color=never'
-
-
